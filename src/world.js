@@ -1,6 +1,6 @@
-var Block = require("./block");
 var Agent = require("./agent");
 var types = require("./types");
+var mapGenerator = require("./maps/outside");
 
 module.exports = function World(width, height) {
 
@@ -12,7 +12,7 @@ module.exports = function World(width, height) {
 	world.width = width || 30;
 	world.height = height || 30;
 	world.types = types;
-	world.map = blankGrid(this.width, this.height);
+	world.map = mapGenerator(world.width, world.height, types);
 	world.agents = {};
 	world.agentsCount = 0;
 	world.spawn = function(conn) {
@@ -61,14 +61,31 @@ module.exports = function World(width, height) {
 					y = -walk;
 				}
 
-				agent.x += x;
-				agent.y += y;
+				// Enfore world boundaries
+				// todo: use modulo instead
+				var x2, y2;
+				x2 = agent.x + x;
+				y2 = agent.y + y;
 
-				if (agent.x >= world.width) agent.x = world.width-1;
-				if (agent.x < 0) agent.x = 0;
+				if (x2 >= world.width) x2 = world.width-1;
+				if (x2 < 0) x2 = 0;
 
-				if (agent.y >= world.height) agent.y = world.height-1;
-				if (agent.y < 0) agent.y = 0;
+				if (y2 >= world.height) y2 = world.height-1;
+				if (y2 < 0) y2 = 0;
+
+				// Enforce solid blocks
+				var block = world.map[x2 + "-" + y2];
+				if (block) {
+					var type = world.types[block.type];
+					if (type.solid) {
+						x2 = agent.x;
+						y2 = agent.y;
+					}
+				}
+
+				// Set new coords
+				agent.x = x2;
+				agent.y = y2;
 			}
 
 			if (action.next !== undefined) {
@@ -99,14 +116,3 @@ module.exports = function World(width, height) {
 	};
 };
 
-function blankGrid(width, height) {
-	var grid = {};
-	var block;
-	for (var x = 0; x < width; x++) {
-		for (var y = 0; y < height; y++) {
-			block = new Block(x, y, "soil");
-			grid[block.x+"-"+block.y] = block;
-		}
-	}
-	return grid;
-}
