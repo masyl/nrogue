@@ -1,24 +1,26 @@
 var Agent = require("./agent");
+var g = require("./g");
 var types = require("./types");
 var mapGenerator = require("./maps/outside");
 
-module.exports = function World(width, height) {
+module.exports = function World(width, height, density) {
 
 	var
 		world = this,
 		agentsCount = 0;
 	world.age = 0;
 	world.tps = 1; // Turns Per Second
+	world.density = density || 1;
 	world.width = width || 30;
 	world.height = height || 30;
 	world.types = types;
-	world.map = mapGenerator(world.width, world.height, types);
+	world.map = mapGenerator(world);
 	world.agents = {};
 	world.agentsCount = 0;
 	world.spawn = function(conn) {
 		agentsCount++;
 		
-		var agent = new Agent(agentsCount, Math.floor(world.width/2), Math.floor(world.height/2), conn, end, react);
+		var agent = new Agent(agentsCount, g.rnd(world.width-10)+5, g.rnd(world.height-10)+5, conn, end, react);
 
 		function react(action) {
 			//console.log("react:", action.dir, action.walk);

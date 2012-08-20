@@ -1,4 +1,6 @@
 # TODO
+- Agents spawn at a random point
+- By default maps borders warp to the other side
 - Apply "vision" limit when sending the list of agents to an agent
 - Agent: Attack, attack strength, attack range, health and damage
 - Map: Generate trees (obstacle)
@@ -9,3 +11,20 @@
 - Client: Highlight "local" agents
 - Client: User controls with mouse and keyboard
 - Client: "observer" type agent
+- Suicide command
+- Re-spawn command
+- Mouse-over or click shows block or agent information
+
+# AWESOME
+- Buildings with doors that can be activated
+- Zombie that are attracted by noise
+- Day and night cycle, with zombies a lot more active during the night
+- Lighting effect at night
+- Dead agents leave a blood trace
+- Ability for agent to walk or run (oversampling of ticks)
+- Additionnal layers for trees, clouds
+- Animated water in the river with fishies
+- Notion of inside/outside buildings, open/closed building
+
+# Gameplay
+- Server spawns zombies at regular interval, with a maximum

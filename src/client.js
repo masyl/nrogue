@@ -17,8 +17,8 @@ function drawMap(map, types, target) {
 	var html = "";
 	var type;
 	var agent;
-	var height=11;
-	var width=11;
+	var height=8;
+	var width=8;
 	var left;
 	var top;
 	var block;

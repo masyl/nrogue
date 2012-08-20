@@ -6,25 +6,27 @@ var tree = " TT -TTTT-TTTT- TT";
 var bush = "TT-TT";
 var house = "WWWWWW-W    W-W    W-W    W-W    W-WW  WW";
 
-module.exports = function (width, height) {
+module.exports = function (world) {
 	var grid = {};
 	var block;
-	for (var x = 0; x < width; x++) {
-		for (var y = 0; y < height; y++) {
+	for (var x = 0; x < world.width; x++) {
+		for (var y = 0; y < world.height; y++) {
 			block = new Block(x, y, "grass");
 			grid[block.x+"-"+block.y] = block;
 		}
 	}
 	var materials = {W:"wall",T:"tree"};
 	var stamps = [tower, house, tree, bush];
-	for (var i = 0; i < g.rnd(16) + 8; i++) {
+	var count = (g.rnd(12) + 4) * world.density;
+	for (var i = 0; i < count; i++) {
 		stamp(
 			grid,
-			g.rnd(width-10)+2,
-			g.rnd(height-10)+2,
+			g.rnd(world.width-10)+2,
+			g.rnd(world.height-10)+2,
 			stamps[g.rnd(stamps.length)],
 			materials); // todo: randomize
 	}
+	console.log("World generation complete");
 	return grid;
 };
 
