@@ -1,11 +1,11 @@
+var g = require("./g");// Global package
 module.exports = function Agent(id, x, y, conn, end, react) {
-	function rnd(i) {return Math.floor(Math.random()*i)}
 
 	var agent = this;
 	agent.id = id+""; // A unique id given by the world
 	agent.x = x; // X coordinate on the map
 	agent.y = y; // X coordinate on the map
-	agent.dir = rnd(8); // Which direction the agent is facing
+	agent.dir = g.rnd(8); // Which direction the agent is facing
 	agent.type = "player"; // Type of agent
 	agent.next = { // The request for the next tick
 		ready: true,

@@ -1,15 +1,10 @@
-var Block = require("../block");
+var g = require("../g");// Global package
+var Block = g.Block;
 
-var towerStamp = "AAAA-" +
-	"A  A-" +
-	"A  A-" +
-	"AAAA";
-var bigTowerStamp = "AAAAAA-" +
-	"A    A-" +
-	"A    A-" +
-	"A    A-" +
-	"A    A-" +
-	"AAAAAA";
+var tower = "WWWW-W  W-W  W-WWWW";
+var tree = " TT -TTTT-TTTT- TT";
+var bush = "TT-TT";
+var house = "WWWWWW-W    W-W    W-W    W-W    W-WW  WW";
 
 module.exports = function (width, height) {
 	var grid = {};
@@ -20,11 +15,16 @@ module.exports = function (width, height) {
 			grid[block.x+"-"+block.y] = block;
 		}
 	}
-	stamp(grid, 10, 10, towerStamp, {A:"wall"}); // todo: randomize
-	stamp(grid, 20, 15, towerStamp, {A:"wall"}); // todo: randomize
-	stamp(grid, 60, 12, bigTowerStamp, {A:"wall"}); // todo: randomize
-	stamp(grid, 50, 4, bigTowerStamp, {A:"wall"}); // todo: randomize
-	stamp(grid, 40, 23, bigTowerStamp, {A:"wall"}); // todo: randomize
+	var materials = {W:"wall",T:"tree"};
+	var stamps = [tower, house, tree, bush];
+	for (var i = 0; i < g.rnd(16) + 8; i++) {
+		stamp(
+			grid,
+			g.rnd(width-10)+2,
+			g.rnd(height-10)+2,
+			stamps[g.rnd(stamps.length)],
+			materials); // todo: randomize
+	}
 	return grid;
 };
 

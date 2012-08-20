@@ -8,10 +8,17 @@ module.exports = {
 		solid: false
 	},
 	"wall": {
-		symbol: "#",
+		symbol: "W",
 		label: "Wall",
 		color: "#444444",
 		bgcolor: "#555555",
+		solid: true
+	},
+	"tree": {
+		symbol: "T",
+		label: "Tree",
+		color: "#006600",
+		bgcolor: "#005500",
 		solid: true
 	},
 	"soil": {
