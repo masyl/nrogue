@@ -23,7 +23,7 @@ function drawAgentList(agents) {
 	var html = "", agent;
 	for (var i in agents) {
 		agent = agents[i];
-		html += "<li>" + agent.id + " - " + agent.type + "</li>";
+		html += "<li>" + (Math.abs(agent.health * 100)) + " - " + agent.id + " - " + agent.type + "</li>";
 	}
 	agentList.innerHTML = html;
 }

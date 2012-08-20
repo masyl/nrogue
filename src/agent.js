@@ -7,6 +7,7 @@ module.exports = function Agent(id, x, y, conn, end, react) {
 	agent.y = y; // X coordinate on the map
 	agent.dir = g.rnd(8); // Which direction the agent is facing
 	agent.type = "player"; // Type of agent
+	agent.health = 1; // Health
 	agent.next = { // The request for the next tick
 		ready: true,
 		agents: true,
