@@ -1,5 +1,6 @@
 # TODO
-- Agents spawn at a random point
+- Structure world in layers: ground, objects, people, buildings, high-vegetation, clouds.
+- DONE: Agents spawn at a random point
 - By default maps borders warp to the other side
 - Apply "vision" limit when sending the list of agents to an agent
 - Agent: Attack, attack strength, attack range, health and damage
