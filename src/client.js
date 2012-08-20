@@ -1,3 +1,10 @@
+(function () {
+var d = document;
+
+var agentList = d.getElementById("agentList");
+var mapGrid = d.getElementById("map");
+var agentsGrid = d.getElementById("agents");
+
 
 function getJSON(url, callback) {
 	var req = new XMLHttpRequest();
@@ -10,6 +17,15 @@ function getJSON(url, callback) {
 		}
 	};
 	req.send(null);
+}
+
+function drawAgentList(agents) {
+	var html = "", agent;
+	for (var i in agents) {
+		agent = agents[i];
+		html += "<li>" + agent.id + " - " + agent.type + "</li>";
+	}
+	agentList.innerHTML = html;
 }
 
 function drawMap(map, types, target) {
@@ -42,9 +58,6 @@ function buildAgentsMap(world) {
 	}
 	return agents;
 }
-
-var mapGrid = document.getElementById("map");
-var agentsGrid = document.getElementById("agents");
 
 function Agent(action, conn) {
 	var agent = this;
@@ -81,6 +94,9 @@ function Agent(action, conn) {
 			worldView.width = world.width;
 			worldView.height = world.height;
 			drawMap(worldView.map, worldView.types, mapGrid);
+		}
+		if (world.agents) {
+			drawAgentList(world.agents);
 		}
 		
 		var action = agent.action(worldView, world.self);
@@ -120,4 +136,4 @@ for (var i = 0; i < 1; i++) {
 }
 console.log("spawned agents!", agents);
 
-console.log("go!");
+})();

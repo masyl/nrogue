@@ -1,10 +1,10 @@
 # TODO
-- Structure world in layers: ground, objects, people, buildings, high-vegetation, clouds.
+- Build process for optimization and packaging
 - DONE: Agents spawn at a random point
-- By default maps borders warp to the other side
+- DONE: By default maps borders warp to the other side
+- DONE: Map: Generate trees (obstacle)
 - Apply "vision" limit when sending the list of agents to an agent
 - Agent: Attack, attack strength, attack range, health and damage
-- Map: Generate trees (obstacle)
 - Map: Generate rocks & boulders (obstacle)
 - Map: Generate ponds (obstacle)
 - Server/AI: spawn agents with "zombie" ruleset from server
@@ -15,6 +15,8 @@
 - Suicide command
 - Re-spawn command
 - Mouse-over or click shows block or agent information
+- Structure world in layers: ground, objects, people, buildings, high-vegetation, clouds.
+- On the client, tun "agent code" in a webworker
 
 # AWESOME
 - Buildings with doors that can be activated
