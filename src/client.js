@@ -32,7 +32,7 @@ function drawMap(map, types, target) {
 		type = types[block.type];			
 		left = block.x * width;
 		top = block.y * height;
-		html += "<span style='width: " + width + "px; height: " + height + "px; left: " + left + "px; top: " + top + "px; color:" + type.color + "; background: " + type.bgcolor + " '>" + type.symbol + "</span>";
+		html += "<span class='block' style='width: " + width + "px; height: " + height + "px; left: " + left + "px; top: " + top + "px; color:" + type.color + "; background: " + type.bgcolor + " '>" + type.symbol + "</span>";
 	}
 
 	target.innerHTML = html;

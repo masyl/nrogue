@@ -1,10 +1,12 @@
 var g = require("../g");// Global package
 var Block = g.Block;
 
+var boulder = "WWW-WWW-WWW";
+var rock = "W";
 var tower = "WWWW-W  W-W  W-WWWW";
 var tree = " TT -TTTT-TTTT- TT";
 var bush = "TT-TT";
-var house = "WWWWWW-W    W-W    W-W    W-W    W-WW  WW";
+var house = "WWWWWW-WFFFFW-WFFFFW-WFFFFW-WFFFFW-WWFFWW";
 
 module.exports = function (world) {
 	var grid = {};
@@ -15,8 +17,8 @@ module.exports = function (world) {
 			grid[block.x+"-"+block.y] = block;
 		}
 	}
-	var materials = {W:"wall",T:"tree"};
-	var stamps = [tower, house, tree, bush];
+	var materials = {W:"wall",T:"tree", F:"floor"};
+	var stamps = [tower, house, tree, bush, boulder, rock];
 	var count = (g.rnd(12) + 4) * world.density;
 	for (var i = 0; i < count; i++) {
 		stamp(

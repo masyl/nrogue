@@ -14,6 +14,13 @@ module.exports = {
 		bgcolor: "#555555",
 		solid: true
 	},
+	"floor": {
+		symbol: "F",
+		label: "Floor",
+		color: "#BD9A6D",
+		bgcolor: "#CDAA7D",
+		solid: false
+	},
 	"tree": {
 		symbol: "T",
 		label: "Tree",
