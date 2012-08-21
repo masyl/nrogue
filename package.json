@@ -1,10 +1,14 @@
 {
   "name": "nrogue",
-  "version": "0.0.1",
+  "version": "0.0.1-2",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node app.js"
   },
-  "license": "Public Domain"
+  "license": "Public Domain",
+  "subdomain": "nrogue",
+  "engines": {
+    "node": "0.8.x"
+  }
 }

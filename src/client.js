@@ -40,8 +40,8 @@
 	
 	function drawWorld(world) {
 		var datetime = new Date(world.datetime);
-		css.innerHTML = "#map { -webkit-filter: opacity(" + (world.sunlight + 0.2) + "); }";
-		worldStats.innerHTML = datetime.toTimeString();
+		//css.innerHTML = "#map { -webkit-filter: opacity(" + (world.sunlight + 0.2) + "); }";
+		//worldStats.innerHTML = datetime.toTimeString();
 		//-webkit-filter: saturate(2) grayscale(0.1) hue-rotate(30deg) sepia(0.2)  opacity(0.2);
 	}
 	
@@ -129,7 +129,7 @@
 	
 	var agents = [];
 	for (var i = 0; i < 1; i++) {
-		var socket = new WebSocket('ws://localhost:5000/');
+		var socket = new WebSocket('ws://' + document.location.host);
 		agents.push(new Agent(goingAnywhere, socket));
 	}
 	console.log("spawned agents!", agents);
