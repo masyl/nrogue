@@ -2,22 +2,10 @@
 var d = document;
 
 var agentList = d.getElementById("agentList");
+var worldStats = d.getElementById("worldStats");
 var mapGrid = d.getElementById("map");
 var agentsGrid = d.getElementById("agents");
-
-
-function getJSON(url, callback) {
-	var req = new XMLHttpRequest();
-	req.open('GET', url, true);
-	req.onreadystatechange = function () {
-		if (req.readyState == 4) {
-			var json = req.responseText;
-			var obj = JSON.parse(json);
-			callback(null, obj);
-		}
-	};
-	req.send(null);
-}
+var css = d.getElementById("css");
 
 function drawAgentList(agents) {
 	var html = "", agent;
@@ -46,7 +34,15 @@ function drawMap(map, types, target) {
 		top = block.y * height;
 		html += "<span style='width: " + width + "px; height: " + height + "px; left: " + left + "px; top: " + top + "px; color:" + type.color + "; background: " + type.bgcolor + " '>" + type.symbol + "</span>";
 	}
+
 	target.innerHTML = html;
+}
+
+function drawWorld(world) {
+	var datetime = new Date(world.datetime);
+	css.innerHTML = "#map { -webkit-filter: opacity(" + (world.sunlight + 0.2) + "); }";
+	worldStats.innerHTML = datetime.toTimeString();
+	//-webkit-filter: saturate(2) grayscale(0.1) hue-rotate(30deg) sepia(0.2)  opacity(0.2);
 }
 
 function buildAgentsMap(world) {
@@ -77,6 +73,8 @@ function Agent(action, conn) {
 	};
 	conn.onmessage = function (e) {
 		var world = JSON.parse(e.data);
+
+		drawWorld(world);
 
 		worldView.tps = world.tps;
 		worldView.age = world.age;

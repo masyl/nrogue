@@ -17,9 +17,11 @@ module.exports = function Agent(id, x, y, conn, end, react) {
 
 	agent.act = function (world) {
 		if (agent.next.ready) {
-			var worldView = {
+			var worldView = { // todo: all these attributes should be grouped as "attrs" for simpler serialization
 				tps: world.tps,
 				age: world.age,
+				datetime: world.datetime,
+				sunlight: world.sunlight,
 				self: agent
 			};
 			if (agent.next.agents) {

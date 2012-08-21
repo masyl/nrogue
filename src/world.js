@@ -9,7 +9,8 @@ module.exports = function World(width, height, density) {
 		world = this,
 		agentsCount = 0;
 	world.age = 0;
-	world.tps = 1; // Turns Per Second
+	world.tps = 1; // Ticks Per Second
+	world.sps = 60; // Second Per Seconds
 	world.density = density || 1;
 	world.width = width || 30;
 	world.height = height || 30;
@@ -17,6 +18,8 @@ module.exports = function World(width, height, density) {
 	world.map = mapGenerator(world);
 	world.agents = {};
 	world.agentsCount = 0;
+	world.datetime = new Date();
+	world.sunlight = 1;
 	world.spawn = function(conn) {
 		agentsCount++;
 		
@@ -103,15 +106,29 @@ module.exports = function World(width, height, density) {
 		world.agents[agent.id] = agent;
 		return world;
 	};
-	world.start = function(tps) {
-		if (tps) world.tps = tps;
+	world.start = function(tickPerSeconds, secondsPerTick) {
+		if (tickPerSeconds) world.tps = tickPerSeconds;
+		if (secondsPerTick) world.spt = secondsPerTick;
+		
 		setInterval(function () {
 			world.tick();
 		}, 1000 / world.tps);
 		return world;
 	};
 	world.tick = function () {
+		var datetime = world.datetime;
+
+		// Move time forward
+		datetime.setSeconds(datetime.getSeconds() + world.spt);
+
+		// Adjust sunlight
+		var hours = datetime.getHours() + datetime.getMinutes() / 60;
+		world.sunlight = 1 - Math.abs(hours - 12) / 12;
+
+		// Move age (as ticks) forward
 		world.age ++;
+
+		// Poll every agent
 		for (var agent in world.agents) {
 			world.agents[agent].act(world);
 		}
