@@ -39,7 +39,7 @@
 					agent.next.types = false;
 				}
 				agent.next = {ready: false};
-				conn.sendUTF(JSON.stringify(worldView));
+				conn.send(JSON.stringify(worldView));
 			}
 		};
 	
