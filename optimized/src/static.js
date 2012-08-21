@@ -1,0 +1,1 @@
+(function(){module.exports=function(e,t){var n=require,r="text/",i=n("fs");return n("http").createServer(function(t,n){var s=t.url,o=s=="/"?"/client.html":s,u=e+o;i.lstat(u,function(e,t){n.w=n.writeHead,e||t.blocks==0?(n.w(404),n.end()):(n.w(200,{"Content-Type":{html:r+"html",js:r+"javascript",css:r+"css"}[u.split(".").pop()]}),i.createReadStream(u).pipe(n))})}).listen(t)}})()

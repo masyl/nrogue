@@ -1,0 +1,73 @@
+body {
+    background: #222;
+    color: #ddd;
+    font-family: monospace
+}
+
+h1, h2, h3 {
+    font-size: 1em;
+    color: #999;
+    margin: 0;
+    padding: 0;
+}
+
+#map {
+    z-index: 10000;
+}
+
+#agents {
+    z-index: 20000;
+}
+
+#infos {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 240px;
+    display: block;
+    background: #222;
+}
+
+#agentList {
+    margin:0;
+    padding:0;
+    list-style: none;
+}
+
+#agentList li {
+}
+
+#infos h1 {
+    border-bottom: 2px solid #999;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+.block {text-indent: -1000em;}
+
+#grids {
+    position: absolute;
+    left: 260px;
+    top: 10px;
+    display: block;
+}
+.grid {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    display: block;
+}
+
+.grid span {
+    display: block;
+    position: absolute;
+    font-size: 8px;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+
+
+
+
