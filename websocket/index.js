@@ -2,9 +2,8 @@
 //make public method private
 (function () {
 	var r = require;
-	var extend = r('./u').extend;
 	var WebSocketRequest = r('./req');
-	var util = r('util');
+	var util = r('./u');
 
 	var WebSocketServer = function WebSocketServer(config) {
 		var
@@ -75,11 +74,11 @@
 
 				// Outgoing messages larger than fragmentationThreshold will be
 				// split into multiple fragments.
-				fragmentOutgoingMessages: true,
+//				fragmentOutgoingMessages: true,
 
 				// Outgoing frames are fragmented if they exceed this threshold.
 				// Default is 16KiB
-				fragmentationThreshold: 0x4000,
+//				fragmentationThreshold: 0x4000,
 
 				// If true, fragmented messages will be automatically assembled
 				// and the full message will be emitted via a 'message' event.
@@ -88,14 +87,14 @@
 				// fragmented frames.  Single-frame messages will emit a 'message'
 				// event in addition to the 'frame' event.
 				// Most users will want to leave this set to 'true'
-				assembleFragments: true,
+//				assembleFragments: true,
 
 				// The number of milliseconds to wait after sending a close frame
 				// for an acknowledgement to come back before giving up and just
 				// closing the socket.
 				closeTimeout: 5000
 			};
-			extend(wss.config, config);
+			util.ex(wss.config, config);
 
 			wss.config.httpServer.on('upgrade', handleUpgrade.bind(wss));
 		};
@@ -105,7 +104,7 @@
 		}
 	};
 
-	util.inherits(WebSocketServer, r('events').EventEmitter);
+	util.in(WebSocketServer, util.em);
 
 	module.exports = WebSocketServer;
 })();

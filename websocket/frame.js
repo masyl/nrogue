@@ -1,18 +1,3 @@
-/************************************************************************
- *  Copyright 2010-2011 Worlize Inc.
- *  
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *  
- *      http://www.apache.org/licenses/LICENSE-2.0
- *  
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- ***********************************************************************/
 (function () {
 
 	
@@ -50,20 +35,6 @@
 	            this.opcode  = firstByte  & 0x0F;
 	            this.length = secondByte & 0x7F;
 	            
-	            // Control frame sanity check
-	            if (this.opcode >= 0x08) {
-	                if (this.length > 125) {
-	                    this.protocolError = true;
-	                    this.dropReason = "Illegal control frame longer than 125 bytes.";
-	                    return true;
-	                }
-	                if (!this.fin) {
-	                    this.protocolError = true;
-	                    this.dropReason = "Control frames must not be fragmented.";
-	                    return true;
-	                }
-	            }
-	            
 	            if (this.length === 126) {
 	                this.parseState = 2;
 	            }
@@ -79,7 +50,7 @@
 	        if (bufferList.length >= 2) {
 	            bufferList.joinInto(this.frameHeader, 2, 0, 2);
 	            bufferList.advance(2);
-	            this.length = ruint16(this.frameHeader, 'big', 2);
+	            this.length = ruint16(this.frameHeader, 2);
 	            this.parseState = 4;
 	        }
 	    }
@@ -87,7 +58,7 @@
 	        if (bufferList.length >= 8) {
 	            bufferList.joinInto(this.frameHeader, 2, 0, 8);
 	            bufferList.advance(8);
-	            var lengthPair = ruint64(this.frameHeader, 'big', 2);
+	            var lengthPair = ruint64(this.frameHeader, 2);
 	            if (lengthPair[0] !== 0) {
 	                this.protocolError = true;
 	                this.dropReason = "Unsupported 64-bit length frame received";
@@ -138,7 +109,7 @@
 	                    this.invalidCloseFrameLength = true;
 	                }
 	                if (this.length >= 2) {
-	                    this.closeStatus = ruint16(this.binaryPayload, 'big', 0);
+	                    this.closeStatus = ruint16(this.binaryPayload, 0);
 	                    this.binaryPayload = this.binaryPayload.slice(2);
 	                }
 	            }
@@ -193,7 +164,7 @@
 	            this.length += this.binaryPayload.length;
 	        }
 	        data = new Buffer(this.length);
-	        wuint16(this.closeStatus, 'big', data, 0);
+	        wuint16(this.closeStatus, data, 0);
 	        if (this.length > 2) {
 	            this.binaryPayload.copy(data, 2);
 	        }
@@ -231,12 +202,12 @@
 	    
 	    if (this.length > 125 && this.length <= 0xFFFF) {
 	        // write 16-bit length
-	        wuint16(this.length, 'big', output, outputPos);
+	        wuint16(this.length, output, outputPos);
 	        outputPos += 2;
 	    }
 	    else if (this.length > 0xFFFF) {
 	        // write 64-bit length
-	        wuint64([0x00000000, this.length], 'big', output, outputPos);
+	        wuint64([0x00000000, this.length], output, outputPos);
 	        outputPos += 8;
 	    }
 	    
@@ -249,7 +220,7 @@
 	            else {
 	                maskKey = 0x00000000;
 	            }
-	            wuint32(maskKey, 'big', this.maskBytes, 0);
+	            wuint32(maskKey, this.maskBytes, 0);
 	
 	            // write the mask key
 	            this.maskBytes.copy(output, outputPos);
@@ -283,99 +254,36 @@
 	}
 
 
-	function ruint16(buffer, endian, offset)
-	{
+	function ruint16(buffer, offset) {
 		var val = 0;
-		if (endian == 'big') {
-			val = buffer[offset] << 8;
-			val |=  buffer[offset+1];
-		} else {
-			val = buffer[offset];
-			val |= buffer[offset+1] << 8;
-		}
-
+		val = buffer[offset] << 8;
+		val |=  buffer[offset+1];
 		return (val);
 	}
 
-	function ruint64(buffer, endian, offset)
-	{
+	function ruint64(buffer, offset) {
 		var val = new Array(2);
-
-		if (endian == 'big') {
-			val[0] = ruint32(buffer, endian, offset);
-			val[1] = ruint32(buffer, endian, offset+4);
-		} else {
-			val[0] = ruint32(buffer, endian, offset+4);
-			val[1] = ruint32(buffer, endian, offset);
-		}
-
+		val[0] = ruint32(buffer, offset);
+		val[1] = ruint32(buffer, offset+4);
 		return (val);
 	}
 
 
-	function prepuint(value, max)
-	{
-		if (typeof (value) != 'number')
-			throw (new (Error('cannot write a non-number as a number')));
 
-		if (value < 0)
-			throw (new Error('specified a negative value for writing an ' +
-				'unsigned value'));
-
-		if (value > max)
-			throw (new Error('value is larger than maximum value for ' +
-				'type'));
-
-		if (Math.floor(value) !== value)
-			throw (new Error('value has a fractional component'));
-
-		return (value);
+	function wuint16(val, buffer, offset) {
+		buffer[offset] = (val & 0xff00) >>> 8;
+		buffer[offset+1] = val & 0x00ff;
+	}
+	function wuint32(val, buffer, offset) {
+		buffer[offset] = (val - (val & 0x00ffffff)) / Math.pow(2, 24);
+		buffer[offset+1] = (val >>> 16) & 0xff;
+		buffer[offset+2] = (val >>> 8) & 0xff;
+		buffer[offset+3] = val & 0xff;
 	}
 
-	function wuint16(value, endian, buffer, offset)
-	{
-		var val;
-
-		val = prepuint(value, 0xffff);
-		if (endian == 'big') {
-			buffer[offset] = (val & 0xff00) >>> 8;
-			buffer[offset+1] = val & 0x00ff;
-		} else {
-			buffer[offset+1] = (val & 0xff00) >>> 8;
-			buffer[offset] = val & 0x00ff;
-		}
-	}
-	function wuint32(value, endian, buffer, offset)
-	{
-		var val;
-
-		val = prepuint(value, 0xffffffff);
-		if (endian == 'big') {
-			buffer[offset] = (val - (val & 0x00ffffff)) / Math.pow(2, 24);
-			buffer[offset+1] = (val >>> 16) & 0xff;
-			buffer[offset+2] = (val >>> 8) & 0xff;
-			buffer[offset+3] = val & 0xff;
-		} else {
-			buffer[offset+3] = (val - (val & 0x00ffffff)) /
-				Math.pow(2, 24);
-			buffer[offset+2] = (val >>> 16) & 0xff;
-			buffer[offset+1] = (val >>> 8) & 0xff;
-			buffer[offset] = val & 0xff;
-		}
-	}
-
-	function wuint64(value, endian, buffer, offset)
-	{
-		prepuint(value[0], 0xffffffff);
-		prepuint(value[1], 0xffffffff);
-
-		if (endian == 'big') {
-			wuint32(value[0], endian, buffer, offset);
-			wuint32(value[1], endian, buffer, offset+4);
-		} else {
-			wuint32(value[0], endian, buffer, offset+4);
-			wuint32(value[1], endian, buffer, offset);
-		}
+	function wuint64(value, buffer, offset) {
+		wuint32(value[0], buffer, offset);
+		wuint32(value[1], buffer, offset+4);
 	}
 
 	module.exports = WebSocketFrame;

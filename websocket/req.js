@@ -10,9 +10,8 @@
 (function () {
 	var r = require;
 	var crypto = r('crypto');
-	var util = r('util');
+	var util = r('./u');
 	var url = r('url');
-	var EventEmitter = r('events').EventEmitter;
 	var WebSocketConnection = r('./conn');
 	var headerValueSplitRegExp = /,\s*/;
 	var headerParamSplitRegExp = /;\s*/;
@@ -137,7 +136,7 @@
 
 	}
 
-	util.inherits(WebSocketRequest, EventEmitter);
+	util.in(WebSocketRequest, util.em);
 
 
 	module.exports = WebSocketRequest;

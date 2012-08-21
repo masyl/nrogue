@@ -1,1 +1,1 @@
-(function(){module.exports={extend:function(t,n){for(var r in n)t[r]=n[r]}}})()
+(function(){var e=require;module.exports={"in":e("util").inherits,em:e("events").EventEmitter,ex:function(t,n){for(var r in n)t[r]=n[r]}}})()

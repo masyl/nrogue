@@ -1,19 +1,13 @@
 (function () {
 	var r = require;
-		// This file was copied from https://github.com/substack/node-bufferlist
-	// and modified to be able to copy bytes from the bufferlist directly into
-	// a pre-existing fixed-size buffer without an additional memory allocation.
-	
-	// bufferlist.js
-	// Treat a linked list of buffers as a single variable-size buffer.
+	var util = r('./u');
 	var Buffer = r('buffer').Buffer;
-	var EventEmitter = r('events').EventEmitter;
 	
 	module.exports = BufferList;
 	
 	function BufferList(opts) {
 	    if (!(this instanceof BufferList)) return new BufferList(opts);
-	    EventEmitter.call(this);
+		util.em.call(this);
 	    var self = this;
 	    
 	    if (typeof(opts) == 'undefined') opts = {};
@@ -190,6 +184,6 @@
 	        return self.take('binary');
 	    };
 	}
-	r('util').inherits(BufferList, EventEmitter);
+	util.in(BufferList, util.em);
 
 })();

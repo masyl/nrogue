@@ -1,1 +1,1 @@
-(function(){function i(e){(new r.server({httpServer:n(process.cwd()+"/src",5e3),autoAcceptConnections:!1})).on("request",function(t){e.spawn(t.accept("",t.origin))})}var e=require,t=e("./src/world"),n=e("./src/static"),r=e("./websocket"),s=new t(50,50,2);i(s.start(8,120))})()
+(function(){function i(e){(new r({httpServer:n(process.cwd()+"/src",5e3)})).on("connect",function(t){e.spawn(t)})}var e=require,t=e("./src/world"),n=e("./src/static"),r=e("./websocket"),s=new t(50,50,2);i(s.start(8,120))})()

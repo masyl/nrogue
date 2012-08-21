@@ -2,8 +2,7 @@
 //toto: figure out if we can skip handling of .protocolError
 (function () {
 	var r = require;
-	var util = r('util');
-	var EventEmitter = r('events').EventEmitter;
+	var util = r('./u');
 	var WebSocketFrame = r('./frame');
 	var BufferList = r('./list');
 	var STATE_CLOSING = "closing";
@@ -11,9 +10,10 @@
 	
 	function WebSocketConnection(socket, extensions, protocol, maskOutgoingPackets, config) {
 		var wsc = this;
-	    wsc.config = config;
-	    wsc.socket = socket;
-	    wsc.protocol = protocol;
+		var outputPaused = false;
+		var outgoingFrameQueue = [];
+		var bytesWaitingToFlush = 0;
+		wsc.config = config;
 	    wsc.extensions = extensions;
 	    wsc.remoteAddress = socket.remoteAddress;
 	    wsc.closeReasonCode = -1;
@@ -32,7 +32,7 @@
 	    
 	    // Prepare for receiving first frame
 	    wsc.currentFrame = new WebSocketFrame(wsc.maskBytes, wsc.frameHeader, wsc.config);
-	    wsc.fragmentationSize = 0; // data received so far...
+//	    wsc.fragmentationSize = 0; // data received so far...
 	    wsc.frameQueue = [];
 	    
 	    // Various bits of connection state
@@ -41,7 +41,7 @@
 	    wsc.waitingForCloseResponse = false;
 	    
 	    wsc.closeTimeout = wsc.config.closeTimeout;
-	    wsc.assembleFragments = wsc.config.assembleFragments;
+//	    wsc.assembleFragments = wsc.config.assembleFragments;
 	    wsc.maxReceivedMessageSize = wsc.config.maxReceivedMessageSize;
 	
 		wsc.data = function(data) {
@@ -62,9 +62,9 @@
 					return;
 				}
 
-				if (!wsc.assembleFragments) {
+//				if (!wsc.assembleFragments) {
 					wsc.emit('frame', wsc.currentFrame);
-				}
+//				}
 				wsc.processFrame(wsc.currentFrame);
 				wsc.currentFrame = new WebSocketFrame(wsc.maskBytes, wsc.frameHeader, wsc.config);
 			}
@@ -75,15 +75,15 @@
 			if (wsc.listeners('error').length > 0) {
 				wsc.emit('error', error);
 			}
-			wsc.socket.end();
+			socket.end();
 		};
 
 		wsc.end = function() {
 			// console.log((new Date()) + " - Socket End");
-			wsc.socket.end();
+			socket.end();
 			wsc.frameQueue = null;
-			wsc.outgoingFrameQueue = [];
-			wsc.fragmentationSize = 0;
+			outgoingFrameQueue = [];
+//			wsc.fragmentationSize = 0;
 			wsc.bufferList = null;
 		};
 
@@ -91,11 +91,6 @@
 			wsc.socketHadError = hadError;
 			wsc.connected = false;
 			wsc.state = STATE_CLOSED;
-			// If closeReasonCode is still set to -1 at this point then we must
-			// not have received a close frame!!
-			if (wsc.closeReasonCode === -1) {
-				wsc.closeReasonCode = 1006;
-			}
 			if (!wsc.closeEventEmitted) {
 				wsc.closeEventEmitted = true;
 				// console.log((new Date()) + " - Emitting WebSocketConnection close event");
@@ -105,7 +100,7 @@
 		};
 
 		wsc.drain = function() {
-			wsc.outputPaused = false;
+			outputPaused = false;
 			wsc.processOutgoingFrameQueue();
 		};
 
@@ -126,9 +121,9 @@
 			}
 
 			wsc.closeReasonCode = reasonCode;
-			wsc.outgoingFrameQueue = [];
+			outgoingFrameQueue = [];
 			wsc.frameQueue = [];
-			wsc.fragmentationSize = 0;
+//			wsc.fragmentationSize = 0;
 			if (!skipCloseFrame) {
 				wsc.sendCloseFrame(reasonCode, "", true);
 			}
@@ -136,7 +131,7 @@
 			wsc.state = STATE_CLOSED;
 			wsc.closeEventEmitted = true;
 			wsc.emit('close', reasonCode, "");
-			wsc.socket.destroy();
+			socket.destroy();
 		};
 
 		wsc.setCloseTimer = function() {
@@ -160,7 +155,7 @@
 			if (wsc.waitingForCloseResponse) {
 				// console.log((new Date()) + " - Close response not received from client.  Forcing socket end.");
 				wsc.waitingForCloseResponse = false;
-				wsc.socket.end();
+				socket.end();
 			}
 		};
 
@@ -169,77 +164,77 @@
 			var message;
 
 			switch(frame.opcode) {
-				case 0x02: // WebSocketFrame.BINARY_FRAME
-					if (wsc.assembleFragments) {
-						if (frame.fin) {
-							// Complete single-frame message received
-							wsc.emit('message', {
-								type: 'binary',
-								binaryData: frame.binaryPayload
-							});
-						}
-						else {
-							// beginning of a fragmented message
-							wsc.frameQueue.push(frame);
-							wsc.fragmentationSize = frame.length;
-						}
-					}
-					break;
+//				case 0x02: // WebSocketFrame.BINARY_FRAME
+//					if (wsc.assembleFragments) {
+//						if (frame.fin) {
+//							// Complete single-frame message received
+//							wsc.emit('message', {
+//								type: 'binary',
+//								binaryData: frame.binaryPayload
+//							});
+//						}
+//						else {
+//							// beginning of a fragmented message
+//							wsc.frameQueue.push(frame);
+//							wsc.fragmentationSize = frame.length;
+//						}
+//					}
+//					break;
 				case 0x01: // WebSocketFrame.TEXT_FRAME
-					if (wsc.assembleFragments) {
-						if (frame.fin) {
+//					if (wsc.assembleFragments) {
+//						if (frame.fin) {
 							// Complete single-frame message received
 							wsc.emit('message', {
 								type: 'utf8',
 								utf8Data: frame.binaryPayload.toString('utf8')
 							});
-						}
-						else {
-							// beginning of a fragmented message
-							wsc.frameQueue.push(frame);
-							wsc.fragmentationSize = frame.length;
-						}
-					}
+//						}
+//						else {
+//							// beginning of a fragmented message
+//							wsc.frameQueue.push(frame);
+//							wsc.fragmentationSize = frame.length;
+//						}
+//					}
 					break;
-				case 0x00: // WebSocketFrame.CONTINUATION
-					if (wsc.assembleFragments) {
-						wsc.fragmentationSize += frame.length;
-						wsc.frameQueue.push(frame);
-
-						if (frame.fin) {
-							// end of fragmented message, so we process the whole
-							// message now.  We also have to decode the utf-8 data
-							// for text frames after combining all the fragments.
-							var bytesCopied = 0;
-							var binaryPayload = new Buffer(wsc.fragmentationSize);
-							wsc.frameQueue.forEach(function (currentFrame) {
-								currentFrame.binaryPayload.copy(binaryPayload, bytesCopied);
-								bytesCopied += currentFrame.binaryPayload.length;
-							});
-
-							switch (wsc.frameQueue[0].opcode) {
-								case 0x02: // WebSocketOpcode.BINARY_FRAME
-									wsc.emit('message', {
-										type: 'binary',
-										binaryData: binaryPayload
-									});
-									break;
-								case 0x01: // WebSocketOpcode.TEXT_FRAME
-									wsc.emit('message', {
-										type: 'utf8',
-										utf8Data: binaryPayload.toString('utf8')
-									});
-									break;
-								default:
-									wsc.drop(1002);
-									return;
-							}
-
-							wsc.frameQueue = [];
-							wsc.fragmentationSize = 0;
-						}
-					}
-					break;
+//				case 0x00: // WebSocketFrame.CONTINUATION
+//					if (wsc.assembleFragments) {
+//						wsc.fragmentationSize += frame.length;
+//						wsc.frameQueue.push(frame);
+//
+//						if (frame.fin) {
+//							// end of fragmented message, so we process the whole
+//							// message now.  We also have to decode the utf-8 data
+//							// for text frames after combining all the fragments.
+//							var bytesCopied = 0;
+//							var binaryPayload = new Buffer(wsc.fragmentationSize);
+//							wsc.frameQueue.forEach(function (currentFrame) {
+//								currentFrame.binaryPayload.copy(binaryPayload, bytesCopied);
+//								bytesCopied += currentFrame.binaryPayload.length;
+//							});
+//
+//							switch (wsc.frameQueue[0].opcode) {
+////								case 0x02: // WebSocketOpcode.BINARY_FRAME
+////									wsc.emit('message', {
+////										type: 'binary',
+////										binaryData: binaryPayload
+////									});
+////									break;
+//								case 0x01: // WebSocketOpcode.TEXT_FRAME
+//									wsc.emit('message', {
+//										type: 'utf8',
+//										utf8Data: binaryPayload.toString('utf8')
+//									});
+//									break;
+//								default:
+//									wsc.drop(1002);
+//									return;
+//							}
+//
+//							wsc.frameQueue = [];
+//							wsc.fragmentationSize = 0;
+//						}
+//					}
+//					break;
 				case 0x09: // WebSocketFrame.PING
 //					t.pong(frame.binaryPayload);
 					break;
@@ -254,7 +249,7 @@
 						wsc.clearCloseTimer();
 						wsc.waitingForCloseResponse = false;
 						wsc.state = STATE_CLOSED;
-						wsc.socket.end();
+						socket.end();
 					}
 					else {
 						// Got request from other party to close connection.
@@ -280,7 +275,7 @@
 						}
 
 						wsc.sendCloseFrame(respondCloseReasonCode);
-						wsc.socket.end();
+						socket.end();
 						wsc.connected = false;
 					}
 					break;
@@ -298,53 +293,52 @@
 		};
 
 		wsc.fragmentAndSend = function(frame, cb) {
-			if (frame.opcode > 0x07) {
-				throw new Error("You cannot fragment control frames.");
-			}
-
-			var threshold = wsc.config.fragmentationThreshold;
+//			if (frame.opcode > 0x07) {
+//				throw new Error("You cannot fragment control frames.");
+//			}
+//			var threshold = wsc.config.fragmentationThreshold;
 			var length = frame.binaryPayload.length;
 
-			if (wsc.config.fragmentOutgoingMessages && frame.binaryPayload && length > threshold) {
-				var numFragments = Math.ceil(length / threshold);
-				var sentFragments = 0;
-				var sentCallback = function (err) {
-					if (err) {
-						if (typeof cb === 'function') {
-							// pass only the first error
-							cb(err);
-							cb = null;
-						}
-						return;
-					}
-					++sentFragments;
-					if ((typeof cb === 'function') && (sentFragments === numFragments)) {
-						cb();
-					}
-				};
-				for (var i=1; i <= numFragments; i++) {
-					var currentFrame = new WebSocketFrame(wsc.maskBytes, wsc.frameHeader, wsc.config);
-
-					// continuation opcode except for first frame.
-					currentFrame.opcode = (i === 1) ? frame.opcode : 0x00;
-
-					// fin set on last frame only
-					currentFrame.fin = (i === numFragments);
-
-					// length is likely to be shorter on the last fragment
-					var currentLength = (i === numFragments) ? length - (threshold * (i-1)) : threshold;
-					var sliceStart = threshold * (i-1);
-
-					// Slice the right portion of the original payload
-					currentFrame.binaryPayload = frame.binaryPayload.slice(sliceStart, sliceStart + currentLength);
-
-					wsc.sendFrame(currentFrame, sentCallback);
-				}
-			}
-			else {
+//			if (wsc.config.fragmentOutgoingMessages && frame.binaryPayload && length > threshold) {
+//				var numFragments = Math.ceil(length / threshold);
+//				var sentFragments = 0;
+//				var sentCallback = function (err) {
+//					if (err) {
+//						if (typeof cb === 'function') {
+//							// pass only the first error
+//							cb(err);
+//							cb = null;
+//						}
+//						return;
+//					}
+//					++sentFragments;
+//					if ((typeof cb === 'function') && (sentFragments === numFragments)) {
+//						cb();
+//					}
+//				};
+//				for (var i=1; i <= numFragments; i++) {
+//					var currentFrame = new WebSocketFrame(wsc.maskBytes, wsc.frameHeader, wsc.config);
+//
+//					// continuation opcode except for first frame.
+//					currentFrame.opcode = (i === 1) ? frame.opcode : 0x00;
+//
+//					// fin set on last frame only
+//					currentFrame.fin = (i === numFragments);
+//
+//					// length is likely to be shorter on the last fragment
+//					var currentLength = (i === numFragments) ? length - (threshold * (i-1)) : threshold;
+//					var sliceStart = threshold * (i-1);
+//
+//					// Slice the right portion of the original payload
+//					currentFrame.binaryPayload = frame.binaryPayload.slice(sliceStart, sliceStart + currentLength);
+//
+//					wsc.sendFrame(currentFrame, sentCallback);
+//				}
+//			}
+//			else {
 				frame.fin = true;
 				wsc.sendFrame(frame, cb);
-			}
+//			}
 		};
 
 		wsc.sendCloseFrame = function(reasonCode, reasonText, force) {
@@ -369,17 +363,17 @@
 			}
 			frame.mask = wsc.maskOutgoingPackets;
 			var buffer = frame.toBuffer();
-			wsc.outgoingFrameQueue.unshift([buffer, cb]);
-			wsc.bytesWaitingToFlush += buffer.length;
-			if (!wsc.outputPaused || force) {
+			outgoingFrameQueue.unshift([buffer, cb]);
+			bytesWaitingToFlush += buffer.length;
+			if (!outputPaused || force) {
 				wsc.processOutgoingFrameQueue();
 			}
 		};
 
 		wsc.processOutgoingFrameQueue = function() {
-			if (wsc.outputPaused) { return; }
-			if (wsc.outgoingFrameQueue.length > 0) {
-				var current = wsc.outgoingFrameQueue.pop();
+			if (outputPaused) { return; }
+			if (outgoingFrameQueue.length > 0) {
+				var current = outgoingFrameQueue.pop();
 				var buffer = current[0];
 				var cb = current[1];
 				// there is no need to accumulate messages in the queue if connection closed
@@ -390,7 +384,7 @@
 					return;
 				}
 				try {
-					var flushed = wsc.socket.write(buffer, cb);
+					var flushed = socket.write(buffer, cb);
 				}
 				catch(e) {
 					if (typeof cb === 'function') {
@@ -401,12 +395,12 @@
 					}
 					return;
 				}
-				wsc.bytesWaitingToFlush -= buffer.length;
+				bytesWaitingToFlush -= buffer.length;
 				if (!flushed) {
-					wsc.outputPaused = true;
+					outputPaused = true;
 					return;
 				}
-				process.nextTick(wsc.outgoingFrameQueueHandler);
+				process.nextTick(outgoingFrameQueueHandler);
 			}
 		};
 
@@ -415,25 +409,22 @@
 		// and re-dispatch them in such a way that doesn't make sense
 		// for users of our client, so we want to make sure nobody
 		// else is listening for error events on the socket besides us.
-		wsc.socket.removeAllListeners('error');
-		wsc.socket.on('error', wsc.error.bind(this));
-		wsc.socket.on('data', wsc.data.bind(this));
-		wsc.socket.on('end', wsc.end.bind(this));
-		wsc.socket.on('close', wsc.close.bind(this));
-		wsc.socket.on('drain', wsc.drain.bind(this));
+		socket.removeAllListeners('error');
+		socket.on('error', wsc.error.bind(this));
+		socket.on('data', wsc.data.bind(this));
+		socket.on('end', wsc.end.bind(this));
+		socket.on('close', wsc.close.bind(this));
+		socket.on('drain', wsc.drain.bind(this));
 
-		wsc.socket.setNoDelay(true);
+		socket.setNoDelay(true);
 
-		wsc.outgoingFrameQueue = [];
-	    wsc.outputPaused = false;
-	    wsc.outgoingFrameQueueHandler = wsc.processOutgoingFrameQueue.bind(this);
-	    wsc.bytesWaitingToFlush = 0;
+		outgoingFrameQueueHandler = wsc.processOutgoingFrameQueue.bind(this);
 	    
 	    wsc._closeTimerHandler = wsc.handleCloseTimer.bind(this);
 	    
 	}
 	
-	util.inherits(WebSocketConnection, EventEmitter);
+	util.in(WebSocketConnection, util.em);
 	
 	module.exports = WebSocketConnection;
 })();
