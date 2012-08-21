@@ -1,0 +1,1 @@
+(function(){module.exports={extend:function(t,n){for(var r in n)t[r]=n[r]}}})()

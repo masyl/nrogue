@@ -3,15 +3,14 @@ var
 	r = require,
 	World = r('./src/world'),
 	static = r('./src/static'),
-	webSocket = r('websocket');
+	webSocketServer = r('./websocket');
 
 function startServer(world) {
 	// Setup world state server
-	new webSocket.server({
-		httpServer: static(process.cwd() + "/src", 5000),
-		autoAcceptConnections: false
-	}).on('request', function(request) {
-		world.spawn(request.accept('', request.origin));
+	new webSocketServer({
+		httpServer: static(process.cwd() + "/src", 5000)
+	}).on('connect', function(conn) {
+		world.spawn(conn);
 	});
 }
 
