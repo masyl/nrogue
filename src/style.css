@@ -58,6 +58,10 @@ h1, h2, h3 {
     top: 10px;
     display: block;
 }
+#c {
+    width: 900px;
+    height: 900px;
+}
 .grid {
     position: absolute;
     left: 0px;

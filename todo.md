@@ -2,6 +2,9 @@
 - Should zombies also be spawned by the browser? With the server controlling when each
   client are allowed to spawn zombies ? (it would save time, bytes and cpu)
 
+# BUGS
+- visionRange calculation does not take in account that the map wraps on itself
+
 # TODO
 - DONE: Agents spawn at a random point
 - DONE: By default maps borders warp to the other side
@@ -14,9 +17,8 @@
 - DONE: Client: Highlight the player's agent among others
 - DONE: Apply "vision" limit when sending the list of agents to a client
 - DONE: Implemented "fog of war" vision
-
-- NEXT --> Re-implement map display in Canvas
-
+- DONE: Re-implement map display in Canvas
+- Optimization: Sync map redraw on requestAnimationFrame.
 - Map: Generate ponds
 - Map: Generate roads
 - Server/AI: spawn agents with "zombie" rule set from server

@@ -3,22 +3,19 @@ module.exports = {
 	"grass": {
 		symbol: '"',
 		label: "Grass",
-		color: "#008800",
-		bgcolor: "#009900",
+		color: {r:0, g:148, b:0},
 		solid: false
 	},
 	"wall": {
 		symbol: "W",
 		label: "Wall",
-		color: "#444444",
-		bgcolor: "#555555",
+		color: {r:64, g:64, b:64},
 		solid: true
 	},
 	"floor": {
 		symbol: "F",
 		label: "Floor",
-		color: "#BD9A6D",
-		bgcolor: "#CDAA7D",
+		color: {r:205, g:170, b:125},
 		solid: false
 	},
 	"tree": {
@@ -26,20 +23,19 @@ module.exports = {
 		label: "Tree",
 		color: "#006600",
 		bgcolor: "#005500",
+		color: {r:0, g:102, b:0},
 		solid: true
 	},
 	"soil": {
 		symbol: "·",
 		label: "Soil",
-		color: "#E07070",
-		bgcolor: "#F08080",
+		color: {r:240, g:128, b:128},
 		solid: false
 	},
 	"player": {
 		symbol: "@",
 		label: "Player",
-		color: "#DDD",
-		bgcolor: "#FFF",
+		color: {r:255, g:255, b:255},
 		solid: false
 	}
 };

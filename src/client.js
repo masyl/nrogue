@@ -5,13 +5,20 @@
 	var worldStats = d.getElementById("worldStats");
 	var mapGrid = d.getElementById("map");
 	var agentsGrid = d.getElementById("agents");
-	var css = d.getElementById("css");
-//	var hud = d.getElementById("hud");
+	var ctx = d.getElementById("c").getContext("2d");
 	var target = null;
 
-	var blockHeight = 8;
-	var blockWidth = 8;
+	var blockHeight = 6;
+	var blockWidth = 6;
+	var isDrawing = true;
+	var drawcount = 1;
 
+	window.onfocus = function () {
+		isDrawing = true;
+	};
+	window.onblur = function () {
+		isDrawing = false;
+	};
 	window.onmousemove = function(e) {
 		var span = e.toElement;
 		var x = parseInt(span.getAttribute("data-x"));
@@ -25,6 +32,7 @@
 			};
 		}
 	};
+	
 
 	function drawAgentList(agents) {
 		var html = "", agent;
@@ -35,7 +43,7 @@
 		agentList.innerHTML = html;
 	}
 	
-	function drawMap(map, types, target, self) {
+	function drawAgents(map, types, target, self) {
 		var i;
 		var html = "";
 		var type;
@@ -50,38 +58,52 @@
 			type = types[block.type];			
 			left = block.x * blockWidth;
 			top = block.y * blockHeight;
-			selfClass = "";
-			if (block.isSelf) selfClass = "isSelf";
-			if (self) isInVisionRange = (distance(block, self) < self.visionRange) ? "isInVisionRange" : "notInVisionRange";
-			html += "<span data-x='" + block.x + "' data-y='" + block.y + "' class='block " + isInVisionRange + " " + selfClass + "' style='width: " + blockWidth + "px; height: " + blockHeight + "px; left: " + left + "px; top: " + top + "px; color:" + type.color + "; background: " + type.bgcolor + " '>" + type.symbol + "</span>";
+			ctx.beginPath();
+			ctx.rect(left, top, blockWidth, blockHeight);
+			ctx.fillStyle = type.bgcolor;
+			ctx.fill();
 		}
 	
 		target.innerHTML = html;
 	}
-	
-	function drawWorld(world) {
-		var datetime = new Date(world.datetime);
-		//css.innerHTML = "#map { -webkit-filter: opacity(" + (world.sunlight + 0.2) + "); }";
-		//worldStats.innerHTML = datetime.toTimeString();
-		//-webkit-filter: saturate(2) grayscale(0.1) hue-rotate(30deg) sepia(0.2)  opacity(0.2);
 
-//		var x = blockWidth * world.self.x;
-//		var y = blockHeight * world.self.y;
-//		var r = blockHeight * world.self.visionRange;
-//		var svg = '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" style="stroke:#006600;"/>';
-//		hud.innerHTML = svg;
-	}
-	
-	function buildAgentsMap(world) {
-		var agents = {};
-		var agent;
-		for (var key in world.agents) {
-			agent = world.agents[key];
-			if (key === world.self.id) agent.isSelf = true;
-			agents[agent.x + "-" + agent.y] = agent;
+	var i;
+	var html = "";
+	var types;
+	var type;
+	var agent;
+	var x;
+	var y;
+	var block;
+	var opacity;
+	var self;
+	var agents;
+	function drawMap() {
+		ctx.clearRect (0, 0, 900, 900);
+		if (map) {
+			for (i in map) {
+				block = map[i];
+				opacity = 1;
+				if (self) if (distance(block, self) > self.visionRange) opacity = 0.9;
+				drawBlock(block.x, block.y, types[block.type], opacity);
+			}
 		}
-		return agents;
+		if (agents) {
+			for (i in agents) {
+				block = agents[i];
+				drawBlock(block.x, block.y, types[block.type], 1);
+			}
+		}
 	}
+	function drawBlock(x, y, type, opacity) {
+		var color = type.color;
+		ctx.beginPath();
+		ctx.rect(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
+		ctx.fillStyle = "rgba(" + color.r + "," + color.g + "," + color.b + ", " + opacity +");"
+		ctx.fill();
+	}	
+	
+
 	
 	function Agent(action, conn) {
 		var agent = this;
@@ -102,30 +124,22 @@
 		conn.onmessage = function (e) {
 			var world = JSON.parse(e.data);
 	
-			drawWorld(world);
-	
 			worldView.tps = world.tps;
 			worldView.age = world.age;
-			worldView.self = world.self;
+			self = worldView.self = world.self;
 
 			if (world.types) {
 				worldView.types = world.types;
+				types = world.types;
 			}
+			if (world.map) map = world.map;
+
 			if (world.agents) {
-				worldView.agents = world.agents;
-				worldView.agentsMap = buildAgentsMap(worldView);
-				drawMap(worldView.agentsMap, worldView.types, agentsGrid);
-			}
-			if (world.map) {
-				worldView.map = world.map;
-				worldView.width = world.width;
-				worldView.height = world.height;
-			}
-			if (worldView.age % 4 == 0) drawMap(worldView.map, worldView.types, mapGrid, worldView.self);
-			if (world.agents) {
+				agents = worldView.agents = world.agents;
 				drawAgentList(world.agents);
 			}
-			
+
+			if (isDrawing) drawMap();
 			var action = agent.action(worldView, world.self);
 			
 			action.next = {
