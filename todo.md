@@ -18,6 +18,9 @@
 - DONE: Apply "vision" limit when sending the list of agents to a client
 - DONE: Implemented "fog of war" vision
 - DONE: Re-implement map display in Canvas
+
+- Bring map mouse-following behavior
+
 - Optimization: Sync map redraw on requestAnimationFrame.
 - Map: Generate ponds
 - Map: Generate roads

@@ -5,7 +5,8 @@
 	var worldStats = d.getElementById("worldStats");
 	var mapGrid = d.getElementById("map");
 	var agentsGrid = d.getElementById("agents");
-	var ctx = d.getElementById("c").getContext("2d");
+	var canvas = d.getElementById("c");
+	var ctx = canvas.getContext("2d");
 	var target = null;
 
 	var blockHeight = 6;
@@ -19,10 +20,11 @@
 	window.onblur = function () {
 		isDrawing = false;
 	};
-	window.onmousemove = function(e) {
-		var span = e.toElement;
-		var x = parseInt(span.getAttribute("data-x"));
-		var y = parseInt(span.getAttribute("data-y"));
+	var offsetX = -28
+	var offsetY = -3;
+	canvas.onmousemove = function(e) {
+		var x = Math.floor((e.layerX + offsetX)/ blockWidth);
+		var y = Math.floor((e.layerY + offsetY)/ blockHeight);
 		if (isNaN(x)) {
 			target = null;
 		} else {
