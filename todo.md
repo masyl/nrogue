@@ -2,14 +2,8 @@
 - Should zombies also be spawned by the browser? With the server controlling when each
   client are allowed to spawn zombies ? (it would save time, bytes and cpu)
 
-# BUGS
-- FIXED: Disconnected client don't disappear!
-
 MATHIEU IS DOING:
-- DONE: Agents that skip more than X cycles will slowly start to loose health (lack of breathing ?)
-- DONE: Client: User directs his agent with his mouse
-- DONE: Agent goes back in automatic mode when the mouse is not on the map
-- Client: Highlight the player's agent among others
+- DONE: Client: Highlight the player's agent among others
 - Apply "vision" limit when sending the list of agents to a client
 
 # TODO
@@ -18,6 +12,9 @@ MATHIEU IS DOING:
 - DONE: Map: Generate trees (obstacle)
 - DONE Map: Generate rocks & boulders (obstacle)
 - DONE: Client: Show stats on visible agents
+- DONE: Agents that skip more than X cycles will slowly start to loose health (lack of breathing ?)
+- DONE: Client: User directs his agent with his mouse
+- DONE: Agent goes back in automatic mode when the mouse is not on the map
 - Map: Generate ponds
 - Map: Generate roads
 - Server/AI: spawn agents with "zombie" rule set from server

@@ -41,13 +41,15 @@
 		var left;
 		var top;
 		var block;
-	
+		var selfClass;
 		for (i in map) {
 			block = map[i];
 			type = types[block.type];			
 			left = block.x * width;
 			top = block.y * height;
-			html += "<span data-x='" + block.x + "' data-y='" + block.y + "' class='block' style='width: " + width + "px; height: " + height + "px; left: " + left + "px; top: " + top + "px; color:" + type.color + "; background: " + type.bgcolor + " '>" + type.symbol + "</span>";
+			selfClass = "";
+			if (block.isSelf) selfClass = "isSelf";
+			html += "<span data-x='" + block.x + "' data-y='" + block.y + "' class='block " + selfClass + "' style='width: " + width + "px; height: " + height + "px; left: " + left + "px; top: " + top + "px; color:" + type.color + "; background: " + type.bgcolor + " '>" + type.symbol + "</span>";
 		}
 	
 		target.innerHTML = html;
@@ -65,6 +67,7 @@
 		var agent;
 		for (var key in world.agents) {
 			agent = world.agents[key];
+			if (key === world.self.id) agent.isSelf = true;
 			agents[agent.x + "-" + agent.y] = agent;
 		}
 		return agents;
@@ -93,7 +96,8 @@
 	
 			worldView.tps = world.tps;
 			worldView.age = world.age;
-	
+			worldView.self = world.self;
+
 			if (world.types) {
 				worldView.types = world.types;
 			}
