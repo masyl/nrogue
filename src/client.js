@@ -6,7 +6,22 @@
 	var mapGrid = d.getElementById("map");
 	var agentsGrid = d.getElementById("agents");
 	var css = d.getElementById("css");
-	
+	var target = null;
+
+	window.onmousemove = function(e) {
+		var span = e.toElement;
+		var x = parseInt(span.getAttribute("data-x"));
+		var y = parseInt(span.getAttribute("data-y"));
+		if (isNaN(x)) {
+			target = null;
+		} else {
+			target = {
+				x: x,
+				y: y
+			};
+		}
+	};
+
 	function drawAgentList(agents) {
 		var html = "", agent;
 		for (var i in agents) {
@@ -32,7 +47,7 @@
 			type = types[block.type];			
 			left = block.x * width;
 			top = block.y * height;
-			html += "<span class='block' style='width: " + width + "px; height: " + height + "px; left: " + left + "px; top: " + top + "px; color:" + type.color + "; background: " + type.bgcolor + " '>" + type.symbol + "</span>";
+			html += "<span data-x='" + block.x + "' data-y='" + block.y + "' class='block' style='width: " + width + "px; height: " + height + "px; left: " + left + "px; top: " + top + "px; color:" + type.color + "; background: " + type.bgcolor + " '>" + type.symbol + "</span>";
 		}
 	
 		target.innerHTML = html;
@@ -117,10 +132,40 @@
 	
 	function goingAnywhere(world, self) {
 		var dir = self.dir;
-		var doMove = rnd(4);
-		var change = rnd(3);
-		var dirChange = rnd(3);
-		if (!change) dir = self.dir + dirChange - 1;
+		if (target) {
+			doMove = 1;
+			if (self.x > target.x) {
+				if (self.y > target.y) {
+					dir = 7;
+				} else if (self.y == target.y) {
+					dir = 6;
+				} else {
+					dir = 5;
+				}
+			} else if (self.x == target.x) {
+				if (self.y > target.y) {
+					dir = 0;
+				} else if (self.y == target.y) {
+					dir = 0;
+					doMove = 0;
+				} else {
+					dir = 4;
+				}
+			} else {
+				if (self.y > target.y) {
+					dir = 1;
+				} else if (self.y == target.y) {
+					dir = 2;
+				} else {
+					dir = 3;
+				}
+			}
+		} else {
+			var doMove = rnd(4);
+			var change = rnd(3);
+			var dirChange = rnd(3);
+			if (!change) dir = self.dir + dirChange - 1;
+		}
 		return {
 			dir: dir,
 			walk: (doMove) ? 1 : 0

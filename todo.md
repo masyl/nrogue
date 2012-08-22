@@ -7,9 +7,9 @@
 
 MATHIEU IS DOING:
 - DONE: Agents that skip more than X cycles will slowly start to loose health (lack of breathing ?)
+- DONE: Client: User directs his agent with his mouse
+- DONE: Agent goes back in automatic mode when the mouse is not on the map
 - Client: Highlight the player's agent among others
-- Client: User directs his agent with his mouse
-- Agent goes back in automatic mode when the mouse is not on the map
 - Apply "vision" limit when sending the list of agents to a client
 
 # TODO
