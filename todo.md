@@ -3,13 +3,13 @@
   client are allowed to spawn zombies ? (it would save time, bytes and cpu)
 
 # BUGS
-- Disconnected client dont disapear!
+- FIDEX: Disconnected client don't disappear!
 
 MATHIEU IS DOING:
+- Agents that skip more than X cycles will slowly start to loose health (lack of breathing ?)
 - Client: Highlight the player's agent among others
 - Client: User directs his agent with his mouse
 - Agent goes back in automatic mode when the mouse is not on the map
-- Agents that skip more than X cycles will slowly start to loose health (lack of breathing ?)
 - Apply "vision" limit when sending the list of agents to a client
 
 # TODO
@@ -20,7 +20,7 @@ MATHIEU IS DOING:
 - DONE: Client: Show stats on visible agents
 - Map: Generate ponds
 - Map: Generate roads
-- Server/AI: spawn agents with "zombie" ruleset from server
+- Server/AI: spawn agents with "zombie" rule set from server
 - Client: "observer" type agent
 - Suicide command
 - Re-spawn command

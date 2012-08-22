@@ -8,7 +8,8 @@
 		agent.y = y; // X coordinate on the map
 		agent.dir = g.rnd(8); // Which direction the agent is facing
 		agent.type = "player"; // Type of agent
-		agent.health = 1; // Health
+		agent.health = 1000; // Health
+		agent.skips = 9; // Number of ticks the agent has skipped since his last answer
 		agent.next = { // The request for the next tick
 			ready: true,
 			agents: true,
@@ -18,6 +19,7 @@
 	
 		agent.act = function (world) {
 			if (agent.next.ready) {
+				agent.skips = 0;
 				var worldView = { // todo: all these attributes should be grouped as "attrs" for simpler serialization
 					tps: world.tps,
 					age: world.age,
@@ -40,6 +42,12 @@
 				}
 				agent.next = {ready: false};
 				conn.send(JSON.stringify(worldView));
+			} else {
+				agent.skips += 1;
+				if (agent.skips > 10) agent.health += -5; //todo: put params in config
+				if (agent.health <= 0) {
+					conn.close(); //todo: figure out if it should be .end() .close() or .drop()
+				}
 			}
 		};
 	

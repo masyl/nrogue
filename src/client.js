@@ -11,7 +11,7 @@
 		var html = "", agent;
 		for (var i in agents) {
 			agent = agents[i];
-			html += "<li>" + (Math.abs(agent.health * 100)) + " - " + agent.id + " - " + agent.type + "</li>";
+			html += "<li>" + (Math.round(agent.health / 10)) + " - " + agent.id + " - " + agent.type + "</li>";
 		}
 		agentList.innerHTML = html;
 	}

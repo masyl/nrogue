@@ -28,7 +28,7 @@
 	
 			function react(action) {
 				//console.log("react:", action.dir, action.walk);
-	
+
 				if (action.dir !== undefined && action.dir !== null) {
 					var dir = action.dir;
 					if (dir < 0 ) dir = 7; // todo, Use modulo ?

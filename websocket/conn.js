@@ -113,6 +113,11 @@
 				wsc.state = STATE_CLOSING;
 				wsc.connected = false;
 			}
+			if (!wsc.closeEventEmitted) {
+				wsc.closeEventEmitted = true;
+				// console.log((new Date()) + " - Emitting WebSocketConnection close event");
+				wsc.emit('close', wsc.closeReasonCode);
+			}
 		};
 
 		wsc.drop = function(reasonCode, description, skipCloseFrame) {
