@@ -3,10 +3,10 @@
   client are allowed to spawn zombies ? (it would save time, bytes and cpu)
 
 # BUGS
-- FIDEX: Disconnected client don't disappear!
+- FIXED: Disconnected client don't disappear!
 
 MATHIEU IS DOING:
-- Agents that skip more than X cycles will slowly start to loose health (lack of breathing ?)
+- DONE: Agents that skip more than X cycles will slowly start to loose health (lack of breathing ?)
 - Client: Highlight the player's agent among others
 - Client: User directs his agent with his mouse
 - Agent goes back in automatic mode when the mouse is not on the map
