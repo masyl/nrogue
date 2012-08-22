@@ -9,6 +9,7 @@
 		agent.dir = g.rnd(8); // Which direction the agent is facing
 		agent.type = "player"; // Type of agent
 		agent.health = 1000; // Health
+		agent.visionRange = 20; // Vision range
 		agent.skips = 9; // Number of ticks the agent has skipped since his last answer
 		agent.next = { // The request for the next tick
 			ready: true,
@@ -28,7 +29,15 @@
 					self: agent
 				};
 				if (agent.next.agents) {
-					worldView.agents = world.agents;
+					var agent2;
+					var agents = {};
+					for (var key in world.agents) {
+						agent2 = world.agents[key];
+						if (distance(agent, agent2) < agent.visionRange) agents[key] = agent2;
+					}
+					worldView.agents = agents;
+					// todo: filter by distance
+
 				}
 				if (agent.next.map) {
 					worldView.width = world.width;
@@ -63,4 +72,9 @@
 			end();
 		});
 	};
+
+	function distance(point1, point2) {
+		return Math.sqrt( Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2) );
+	}
+
 })();

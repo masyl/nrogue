@@ -2,10 +2,6 @@
 - Should zombies also be spawned by the browser? With the server controlling when each
   client are allowed to spawn zombies ? (it would save time, bytes and cpu)
 
-MATHIEU IS DOING:
-- DONE: Client: Highlight the player's agent among others
-- Apply "vision" limit when sending the list of agents to a client
-
 # TODO
 - DONE: Agents spawn at a random point
 - DONE: By default maps borders warp to the other side
@@ -15,6 +11,12 @@ MATHIEU IS DOING:
 - DONE: Agents that skip more than X cycles will slowly start to loose health (lack of breathing ?)
 - DONE: Client: User directs his agent with his mouse
 - DONE: Agent goes back in automatic mode when the mouse is not on the map
+- DONE: Client: Highlight the player's agent among others
+- DONE: Apply "vision" limit when sending the list of agents to a client
+- DONE: Implemented "fog of war" vision
+
+- NEXT --> Re-implement map display in Canvas
+
 - Map: Generate ponds
 - Map: Generate roads
 - Server/AI: spawn agents with "zombie" rule set from server
@@ -43,6 +45,7 @@ MATHIEU IS DOING:
 - Enforce a limit of agent per clients/IPs/browsers
 
 # AWESOME
+- try Audio : http://fabiogianini.ch/?p=75
 - Buildings with doors that can be activated
 - Zombie that are attracted by noise
 - Zombies a lot more active during the night

@@ -6,7 +6,11 @@
 	var mapGrid = d.getElementById("map");
 	var agentsGrid = d.getElementById("agents");
 	var css = d.getElementById("css");
+//	var hud = d.getElementById("hud");
 	var target = null;
+
+	var blockHeight = 8;
+	var blockWidth = 8;
 
 	window.onmousemove = function(e) {
 		var span = e.toElement;
@@ -31,25 +35,25 @@
 		agentList.innerHTML = html;
 	}
 	
-	function drawMap(map, types, target) {
+	function drawMap(map, types, target, self) {
 		var i;
 		var html = "";
 		var type;
 		var agent;
-		var height=8;
-		var width=8;
 		var left;
 		var top;
 		var block;
 		var selfClass;
+		var isInVisionRange = "";
 		for (i in map) {
 			block = map[i];
 			type = types[block.type];			
-			left = block.x * width;
-			top = block.y * height;
+			left = block.x * blockWidth;
+			top = block.y * blockHeight;
 			selfClass = "";
 			if (block.isSelf) selfClass = "isSelf";
-			html += "<span data-x='" + block.x + "' data-y='" + block.y + "' class='block " + selfClass + "' style='width: " + width + "px; height: " + height + "px; left: " + left + "px; top: " + top + "px; color:" + type.color + "; background: " + type.bgcolor + " '>" + type.symbol + "</span>";
+			if (self) isInVisionRange = (distance(block, self) < self.visionRange) ? "isInVisionRange" : "notInVisionRange";
+			html += "<span data-x='" + block.x + "' data-y='" + block.y + "' class='block " + isInVisionRange + " " + selfClass + "' style='width: " + blockWidth + "px; height: " + blockHeight + "px; left: " + left + "px; top: " + top + "px; color:" + type.color + "; background: " + type.bgcolor + " '>" + type.symbol + "</span>";
 		}
 	
 		target.innerHTML = html;
@@ -60,6 +64,12 @@
 		//css.innerHTML = "#map { -webkit-filter: opacity(" + (world.sunlight + 0.2) + "); }";
 		//worldStats.innerHTML = datetime.toTimeString();
 		//-webkit-filter: saturate(2) grayscale(0.1) hue-rotate(30deg) sepia(0.2)  opacity(0.2);
+
+//		var x = blockWidth * world.self.x;
+//		var y = blockHeight * world.self.y;
+//		var r = blockHeight * world.self.visionRange;
+//		var svg = '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" style="stroke:#006600;"/>';
+//		hud.innerHTML = svg;
 	}
 	
 	function buildAgentsMap(world) {
@@ -110,8 +120,8 @@
 				worldView.map = world.map;
 				worldView.width = world.width;
 				worldView.height = world.height;
-				drawMap(worldView.map, worldView.types, mapGrid);
 			}
+			if (worldView.age % 4 == 0) drawMap(worldView.map, worldView.types, mapGrid, worldView.self);
 			if (world.agents) {
 				drawAgentList(world.agents);
 			}
@@ -182,5 +192,10 @@
 		agents.push(new Agent(goingAnywhere, socket));
 	}
 	console.log("spawned agents!", agents);
+
+
+	function distance(point1, point2) {
+		return Math.sqrt( Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2) );
+	}
 
 })();
