@@ -10,8 +10,8 @@
 	var target = null;
 	var width; // map width
 	var height; // map height
-	var blockHeight = 5;
-	var blockWidth = 5;
+	var blockHeight = 3;
+	var blockWidth = 3;
 	var blockHeightOffset = 3;
 	var blockWidthOffset = 3;
 	var isDrawing = true;
@@ -94,21 +94,21 @@
 			endDraw();
 		}
 		
-//		ctx.save();
-//		ctx.beginPath();
-//		ctx.arc(self.x * blockWidth, self.y * blockHeight, self.visionRange * blockWidth, 0, Math.PI*2, true);
-//		ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
-//		ctx.lineWidth = 5;
-//		ctx.stroke();
+		ctx.save();
+		ctx.beginPath();
+		ctx.arc(self.x * blockWidth, self.y * blockHeight, self.visionRange * blockWidth, 0, Math.PI*2, true);
+		ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+		ctx.lineWidth = 5;
+		ctx.stroke();
 		
-//		if (action.attack) {
-//			ctx.beginPath();
-//			ctx.arc(self.x * blockWidth + blockWidthOffset, self.y * blockHeight + blockHeightOffset, self.attackRange * blockWidth, 0, Math.PI*2, true);
-//			ctx.strokeStyle = "rgba(255, 64, 64, 0.4)";
-//			ctx.lineWidth = 2;
-//			ctx.stroke();
-//			ctx.restore();
-//		}
+		if (action.attack) {
+			ctx.beginPath();
+			ctx.arc(self.x * blockWidth + blockWidthOffset, self.y * blockHeight + blockHeightOffset, self.attackRange * blockWidth, 0, Math.PI*2, true);
+			ctx.strokeStyle = "rgba(255, 64, 64, 0.4)";
+			ctx.lineWidth = 2;
+			ctx.stroke();
+			ctx.restore();
+		}
 	}
 	function drawBlock(x, y, type, opacity) {
 		if (lastType !== type) {
@@ -217,11 +217,13 @@
 			}
 		}
 
-
-
 		var dir = self.dir;
 		if (target) {
-			doMove = 1;
+			doMove = 0;
+			var dist = getDistance(self, target);
+			if (dist > 1) {
+				doMove = 1;
+			}
 			var angle = getAngle(self, target);
 			dir = Math.round(angle / (360 / 8));
 		} else {

@@ -14,7 +14,7 @@ function startServer(world) {
 	});
 }
 
-var world = new World(100, 100, 5); // width, height, density
+var world = new World(200, 200, 10); // width, height, density
 startServer(world.start(10, 120)); // TicksPerSeconds, SecondsPerSeconds
 
 })();
