@@ -1,5 +1,7 @@
 (function (global) {
-	global.ai.zombie = function (world, self) {
+	if (!global.ai) global.ai = {};
+	global.ai.zombie = function (world, self, _global) {
+		if (_global) global = _global;
 		var move = {};
 		var key;
 		var dist;
@@ -63,4 +65,4 @@
 		move.walk = (doMove) ? 1 : 0;
 		return move;
 	};
-})(this);
+})(this.exports || this);

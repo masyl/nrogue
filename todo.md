@@ -29,8 +29,9 @@
 - DONE: War: An agents attack covers X blocks
 - DONE: Only show attack range on attack
 - DONE: War: Once an agent has no more health he is dead
-
 - DONE: Map: Dont warp on map boundaries
+- DONE: Server/AI: spawn agents with "zombie" rule set from server
+
 - HUD: Should players agent health and HITS in obvious easy to read UI
 - War: Respawn upon death instead of disconnecting
 
@@ -48,7 +49,6 @@
 
 - Optimization: Sync map redraw on requestAnimationFrame.
 - Map: Generate ponds
-- Server/AI: spawn agents with "zombie" rule set from server
 - Client: "observer" type agent
 - Mouse-over or click shows block or agent information
 - Structure world in layers: ground, objects, people, buildings, high-vegetation, clouds.

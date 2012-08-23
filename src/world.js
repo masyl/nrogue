@@ -1,5 +1,6 @@
 (function () {
 	var g = require("./g");
+	var ai = require("./agents/zombie").ai;
 	var Agent = require("./agent");
 	var types = require("./types");
 	var mapGenerator = require("./maps/outside");
@@ -21,10 +22,16 @@
 		world.agentsCount = 0;
 		world.datetime = new Date();
 		world.sunlight = 1;
-		world.spawn = function(conn) {
+		world.spawn = function(conn, ai) {
+			var agent;
+
 			agentsCount++;
 			
-			var agent = new Agent(agentsCount, g.rnd(world.width-10)+5, g.rnd(world.height-10)+5, conn, end, react);
+			if (conn) {
+				agent = new Agent(agentsCount, g.rnd(world.width-10)+5, g.rnd(world.height-10)+5, conn, null, end, react);
+			} else {
+				agent = new Agent(agentsCount, g.rnd(world.width-10)+5, g.rnd(world.height-10)+5, null, ai, end, react);
+			}
 	
 			function react(action) {
 				//console.log("react:", action.dir, action.walk);
@@ -123,6 +130,11 @@
 			if (tickPerSeconds) world.tps = tickPerSeconds;
 			if (secondsPerTick) world.spt = secondsPerTick;
 			
+			// Spawn 10 zombies
+			for (var i = 0; i < 10; i++) {
+				this.spawn(null, ai.zombie);
+			}
+
 			setInterval(function () {
 				world.tick();
 			}, 1000 / world.tps);

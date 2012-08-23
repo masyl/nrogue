@@ -1,7 +1,22 @@
-(function () {
+(function (global) {
+
+	//todo: GET RID OF GLOBAL DUPLICATION BETWEEN FRONT AND BACKEND
+	global.getDistance = function (point1, point2) {
+		return Math.sqrt( Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2) );
+	};
+	global.getAngle = function (point1, point2) {
+		var angle = Math.atan2(point1.x - point2.x, point1.y - point2.y) * (180 / Math.PI);
+		if(angle < 0) angle = Math.abs(angle);
+		else angle = 360 - angle;
+		return angle;
+	};
+	global.rnd = function (i) {
+		return Math.floor(Math.random() * i)
+	};
+
 	var g = require("./g");// Global package
-	module.exports = function Agent(id, x, y, conn, end, react) {
-	
+	module.exports = function Agent(id, x, y, conn, ai, end, react) {
+		// defaults are for a human agent
 		var agent = this;
 		agent.id = id+""; // A unique id given by the world
 		agent.x = x; // X coordinate on the map
@@ -54,32 +69,47 @@
 					worldView.types = world.types;
 					agent.next.types = false;
 				}
-				agent.next = {ready: false};
-				conn.send(JSON.stringify(worldView));
+				agent.next = { ready: false };
+				if (conn) {
+					conn.send(JSON.stringify(worldView));
+				} else if (ai) {
+					var action = ai(worldView, agent, global);
+					action.next = {
+						ready: true,
+						agents: true
+					};
+					react(action);
+				}
 			} else {
 				agent.skips += 1;
 				if (agent.skips > 10) agent.health += -5; //todo: put params in config
 			}
 			if (agent.health <= 0) {
-				conn.close(); //todo: figure out if it should be .end() .close() or .drop()
+				if (conn) {
+					conn.close(); //todo: figure out if it should be .end() .close() or .drop()
+				} else if (ai) {
+					end();
+				}
 			}
 		};
-	
-		//console.log((new Date()) + ' Connection accepted.');
-		conn.on('message', function(message) {
-			//console.log('Received Message: ' + message.utf8Data);
-			var action = JSON.parse(message.utf8Data);
-			react(action);
-		});
-	
-		conn.on('close', function(reasonCode, description) {
-			console.log((new Date()) + ' Disconnected.');
-			end();
-		});
+		if (conn) {
+			
+			//console.log((new Date()) + ' Connection accepted.');
+			conn.on('message', function(message) {
+				//console.log('Received Message: ' + message.utf8Data);
+				var action = JSON.parse(message.utf8Data);
+				react(action);
+			});
+		
+			conn.on('close', function(reasonCode, description) {
+				console.log((new Date()) + ' Disconnected.');
+				end();
+			});
+		}
 	};
 
 	function distance(point1, point2) {
 		return Math.sqrt( Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2) );
 	}
 
-})();
+})(this);
