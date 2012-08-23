@@ -85,11 +85,11 @@
 					x2 = agent.x + x;
 					y2 = agent.y + y;
 	
-					if (x2 >= world.width) x2 = 0;
-					if (x2 < 0) x2 = world.width-1;
+					if (x2 >= world.width) x2 = world.width -1;
+					if (x2 < 0) x2 = 0;
 	
-					if (y2 >= world.height) y2 = 0;
-					if (y2 < 0) y2 = world.height-1;
+					if (y2 >= world.height) y2 = world.height-1;
+					if (y2 < 0) y2 = 0;
 	
 					// Enforce solid blocks
 					var block = world.map[x2 + "-" + y2];

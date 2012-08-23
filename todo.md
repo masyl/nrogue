@@ -4,8 +4,10 @@
 - Should maps also be created by the clients ?
 
 # BUGS
-- visionRange calculation does not take in account that the map wraps on itself
 - agent doesnt get back authonomy once the mouse move out of focus
+- Players agent not highlighted anymore
+- Time doesnt display anymore
+- Day night cycle not showing anymore
 
 # TODO
 - DONE: Agents spawn at a random point
@@ -27,13 +29,18 @@
 - DONE: War: An agents attack covers X blocks
 - DONE: Only show attack range on attack
 - DONE: War: Once an agent has no more health he is dead
+
+- DONE: Map: Dont warp on map boundaries
+- HUD: Should players agent health and HITS in obvious easy to read UI
+- War: Respawn upon death instead of disconnecting
+
+- War: Delay before respawning
 - War: Show where an attack landed
 - War: Attacks have a reload delay enforced
 - War: Attacks make some noise or obvious visual queue
 - War: Attack on click or keystroke
 - War: An agents looses health if he is "hit" by an attack
 - War: An attacker agent knows if an attack was a hit or a miss
-- War: Afeter dying the user is shown a message and waits X seconds before he respawns
 - War: Once an agent is dead he is disconnected and the client must respawn by reconnecting
 - War: Agent has a recuperation rate to gain back health slowly when standing still
 - War: Agent cant attack or be attacked inside a house (on floor)
@@ -41,32 +48,38 @@
 
 - Optimization: Sync map redraw on requestAnimationFrame.
 - Map: Generate ponds
-- Map: Generate roads
 - Server/AI: spawn agents with "zombie" rule set from server
 - Client: "observer" type agent
-- Suicide command
-- Re-spawn command
 - Mouse-over or click shows block or agent information
 - Structure world in layers: ground, objects, people, buildings, high-vegetation, clouds.
-- On the client, tun "agent code" in a webworker
+- On the client, run "agent code" in a webworker
 - Human: search mode when has enough health
-- Human: fight mode when hostile is found
 - Human: rest mode when health is too low
 - Human: flight mode when health is too low and hostile is visible
 - Build process for optimization and packaging
-- Enforce a limit of agent per clients/IPs/browsers
 
-# AWESOME
-- try Audio : http://fabiogianini.ch/?p=75
+# AWESOME MUSTS
+- Drop mines (behave like agents ?)
+- Dead agents leave a blood trace
+
+# AWESOME MAYBE
 - Buildings with doors that can be activated
 - Zombie that are attracted by noise
 - Zombies a lot more active during the night
 - Lighting effect at night
-- Dead agents leave a blood trace
 - Ability for agent to walk or run (oversampling of ticks)
 - Additionnal layers for trees, clouds
 - Animated water in the river with fishies
 - Notion of inside/outside buildings, open/closed building
+- try Audio : http://fabiogianini.ch/?p=75
+
+# AFTER JS13K
+- Suicide command
+- Re-spawn command (instead of reload)
+- Map: Generate roads
+- Enforce a limit of agent per clients/IPs/browsers
+
+
 
 # Gameplay
 - Server spawns zombies at regular interval, with a maximum
