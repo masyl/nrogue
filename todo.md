@@ -1,9 +1,11 @@
 # OPEN QUESTIONS
 - Should zombies also be spawned by the browser? With the server controlling when each
   client are allowed to spawn zombies ? (it would save time, bytes and cpu)
+- Should maps also be created by the clients ?
 
 # BUGS
 - visionRange calculation does not take in account that the map wraps on itself
+- agent doesnt get back authonomy once the mouse move out of focus
 
 # TODO
 - DONE: Agents spawn at a random point
@@ -19,7 +21,23 @@
 - DONE: Implemented "fog of war" vision
 - DONE: Re-implement map display in Canvas
 
-- Bring map mouse-following behavior
+- DONE: War: Agent tries to attack another agent once in range
+- DONE: War: Agent has a specific "range" for his attack
+- DONE: War: Agent has a specific "strength" for his attack
+- DONE: War: An agents attack covers X blocks
+- DONE: Only show attack range on attack
+- DONE: War: Once an agent has no more health he is dead
+- War: Show where an attack landed
+- War: Attacks have a reload delay enforced
+- War: Attacks make some noise or obvious visual queue
+- War: Attack on click or keystroke
+- War: An agents looses health if he is "hit" by an attack
+- War: An attacker agent knows if an attack was a hit or a miss
+- War: Afeter dying the user is shown a message and waits X seconds before he respawns
+- War: Once an agent is dead he is disconnected and the client must respawn by reconnecting
+- War: Agent has a recuperation rate to gain back health slowly when standing still
+- War: Agent cant attack or be attacked inside a house (on floor)
+- War: Zombies can't enter a house (cant step on "floor")
 
 - Optimization: Sync map redraw on requestAnimationFrame.
 - Map: Generate ponds
@@ -35,19 +53,6 @@
 - Human: fight mode when hostile is found
 - Human: rest mode when health is too low
 - Human: flight mode when health is too low and hostile is visible
-- War: Agent has a specific "range" for his attack
-- War: Agent has a specific "strength" for his attack
-- War: Agent tries to attack another agent once in range
-- War: An agents attack covers X blocks
-- War: Attack on click or keystroke
-- Only show attack range on attack
-- War: An agents looses health if he is "hit" by an attack
-- War: An attacker agent knows if an attack was a hit or a miss
-- War: Once an agent has no more health he is dead
-- War: Once an agent is dead he is disconnected and the client must respawn by reconnecting
-- War: Agent has a recuperation rate to gain back health slowly when standing still
-- War: Agent cant attack or be attacked inside a house (on floor)
-- War: Zombies can't enter a house (cant step on "floor")
 - Build process for optimization and packaging
 - Enforce a limit of agent per clients/IPs/browsers
 

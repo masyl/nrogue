@@ -1,11 +1,11 @@
 (function () {
 	var d = document;
-	
-	var agentList = d.getElementById("agentList");
-	var worldStats = d.getElementById("worldStats");
-	var mapGrid = d.getElementById("map");
-	var agentsGrid = d.getElementById("agents");
-	var canvas = d.getElementById("c");
+	d.g = d.getElementById;
+	var agentList = d.g("agentList");
+	var worldStats = d.g("worldStats");
+	var mapGrid = d.g("map");
+	var agentsGrid = d.g("agents");
+	var canvas = d.g("c");
 	var ctx = canvas.getContext("2d");
 	var target = null;
 	var width; // map width
@@ -69,7 +69,7 @@
 	var agents;
 	var frameMax = 0;
 	var frame = frameMax;
-	function drawMap() {
+	function drawMap(action) {
 		frame++;
 		if (map) {
 			if (frame > frameMax) {
@@ -97,12 +97,14 @@
 		ctx.lineWidth = 5;
 		ctx.stroke();
 		
-		ctx.beginPath();
-		ctx.arc(self.x * blockWidth + blockWidthOffset, self.y * blockHeight + blockHeightOffset, self.attackRange * blockWidth, 0, Math.PI*2, true);
-		ctx.strokeStyle = "rgba(255, 0, 0, 0.1)";
-		ctx.lineWidth = 2;
-		ctx.stroke();
-		ctx.restore();
+		if (action.attack) {
+			ctx.beginPath();
+			ctx.arc(self.x * blockWidth + blockWidthOffset, self.y * blockHeight + blockHeightOffset, self.attackRange * blockWidth, 0, Math.PI*2, true);
+			ctx.strokeStyle = "rgba(255, 64, 64, 0.4)";
+			ctx.lineWidth = 2;
+			ctx.stroke();
+			ctx.restore();
+		}
 	}
 	var lastType;
 	var lastFill;
@@ -161,7 +163,6 @@
 				drawAgentList(world.agents);
 			}
 
-			if (isDrawing) drawMap();
 			var action = agent.action(worldView, world.self);
 			
 			action.next = {
@@ -170,6 +171,8 @@
 			};
 	
 			agent.send(action);
+
+			if (isDrawing) drawMap(action);
 		};
 		agent.send = function (obj) {
 			conn.send(JSON.stringify(obj));
@@ -181,6 +184,36 @@
 	}
 	
 	function goingAnywhere(world, self) {
+		var move = {};
+
+		// Try to find an agent in attack range
+		var attackTarget;
+		var attackTargetDist = 99999;
+		var agent;
+		var self = world.self;
+		var selfId = self.id;
+		for (key in world.agents) {
+			agent = world.agents[key];
+			if  (agent.id !== selfId) {
+				var dist = distance(agent, self);
+				if (dist < self.attackRange) {
+					if (dist < attackTargetDist) {
+						attackTarget = agent;
+						attackTargetDist = dist;
+						console.log("YATA");
+					}
+				}
+			}
+		}
+		if (attackTarget && target) {
+			move.attack = {
+				x: attackTarget.x,
+				y: attackTarget.y
+			}
+		}
+
+
+
 		var dir = self.dir;
 		if (target) {
 			doMove = 1;
@@ -216,10 +249,9 @@
 			var dirChange = rnd(3);
 			if (!change) dir = self.dir + dirChange - 1;
 		}
-		return {
-			dir: dir,
-			walk: (doMove) ? 1 : 0
-		}
+		move.dir = dir;
+		move.walk = (doMove) ? 1 : 0;
+		return move;
 	}
 	
 	var agents = [];

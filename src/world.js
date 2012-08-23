@@ -28,6 +28,18 @@
 	
 			function react(action) {
 				//console.log("react:", action.dir, action.walk);
+				var agent2;
+				var key;
+				var dist;
+				if (action.attack) {
+					for (key in world.agents) {
+						agent2 = world.agents[key];
+						var dist = distance(action.attack, agent2);
+						if (dist < agent.attackSize) {
+							agent2.health += -agent.attackStrength;
+						}
+					}
+				}
 
 				if (action.dir !== undefined && action.dir !== null) {
 					var dir = action.dir;
@@ -130,10 +142,14 @@
 			world.age ++;
 	
 			// Poll every agent
-			for (var agent in world.agents) {
-				world.agents[agent].act(world);
+			for (var key in world.agents) {
+				world.agents[key].act(world);
 			}
 		};
 	};
+
+	function distance(point1, point2) {
+		return Math.sqrt( Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2) );
+	}
 
 })();

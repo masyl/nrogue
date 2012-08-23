@@ -11,6 +11,8 @@
 		agent.health = 1000; // Health
 		agent.visionRange = 40; // Vision range
 		agent.attackRange = 4; // Attack range
+		agent.attackSize = 2; // Attack size
+		agent.attackStrength = 100; // Attack strength
 		agent.skips = 9; // Number of ticks the agent has skipped since his last answer
 		agent.next = { // The request for the next tick
 			ready: true,
@@ -57,9 +59,9 @@
 			} else {
 				agent.skips += 1;
 				if (agent.skips > 10) agent.health += -5; //todo: put params in config
-				if (agent.health <= 0) {
-					conn.close(); //todo: figure out if it should be .end() .close() or .drop()
-				}
+			}
+			if (agent.health <= 0) {
+				conn.close(); //todo: figure out if it should be .end() .close() or .drop()
 			}
 		};
 	

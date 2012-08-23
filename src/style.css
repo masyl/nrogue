@@ -3,8 +3,6 @@ body {
     color: #ddd;
     font-family: monospace;
 }
-html {
-}
 h1, h2, h3 {
     font-size: 1em;
     color: #999;
@@ -12,12 +10,9 @@ h1, h2, h3 {
     padding: 0;
 }
 
+#agents,
 #map {
     z-index: 10000;
-}
-
-#agents {
-    z-index: 20000;
 }
 
 #infos {
@@ -33,9 +28,6 @@ h1, h2, h3 {
     margin:0;
     padding:0;
     list-style: none;
-}
-
-#agentList li {
 }
 
 #infos h1 {
