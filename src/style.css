@@ -1,9 +1,10 @@
 body {
     background: #222;
     color: #ddd;
-    font-family: monospace
+    font-family: monospace;
 }
-
+html {
+}
 h1, h2, h3 {
     font-size: 1em;
     color: #999;
@@ -53,14 +54,16 @@ h1, h2, h3 {
 }
 
 #grids {
+    height: 100%;
     position: absolute;
     left: 260px;
     top: 10px;
     display: block;
 }
 #c {
-    width: 900px;
-    height: 900px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
 }
 .grid {
     position: absolute;

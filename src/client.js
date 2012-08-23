@@ -8,9 +8,12 @@
 	var canvas = d.getElementById("c");
 	var ctx = canvas.getContext("2d");
 	var target = null;
-
+	var width; // map width
+	var height; // map height
 	var blockHeight = 6;
 	var blockWidth = 6;
+	var blockHeightOffset = 3;
+	var blockWidthOffset = 3;
 	var isDrawing = true;
 	var drawcount = 1;
 
@@ -20,11 +23,18 @@
 	window.onblur = function () {
 		isDrawing = false;
 	};
-	var offsetX = -28
-	var offsetY = -3;
+	
+	window.onkeypress = function (e) {
+		e.preventDefault();
+		return false;
+	};
+	canvas.onclick = function (e) {
+		e.preventDefault();
+	};
+
 	canvas.onmousemove = function(e) {
-		var x = Math.floor((e.layerX + offsetX)/ blockWidth);
-		var y = Math.floor((e.layerY + offsetY)/ blockHeight);
+		var x = Math.floor((e.layerX)/ blockWidth);
+		var y = Math.floor((e.layerY)/ blockHeight);
 		if (isNaN(x)) {
 			target = null;
 		} else {
@@ -44,30 +54,7 @@
 		}
 		agentList.innerHTML = html;
 	}
-	
-	function drawAgents(map, types, target, self) {
-		var i;
-		var html = "";
-		var type;
-		var agent;
-		var left;
-		var top;
-		var block;
-		var selfClass;
-		var isInVisionRange = "";
-		for (i in map) {
-			block = map[i];
-			type = types[block.type];			
-			left = block.x * blockWidth;
-			top = block.y * blockHeight;
-			ctx.beginPath();
-			ctx.rect(left, top, blockWidth, blockHeight);
-			ctx.fillStyle = type.bgcolor;
-			ctx.fill();
-		}
-	
-		target.innerHTML = html;
-	}
+
 
 	var i;
 	var html = "";
@@ -80,14 +67,19 @@
 	var opacity;
 	var self;
 	var agents;
+	var frameMax = 0;
+	var frame = frameMax;
 	function drawMap() {
-		ctx.clearRect (0, 0, 900, 900);
+		frame++;
 		if (map) {
-			for (i in map) {
-				block = map[i];
+			if (frame > frameMax) {
+				frame = 0;
 				opacity = 1;
-				if (self) if (distance(block, self) > self.visionRange) opacity = 0.9;
-				drawBlock(block.x, block.y, types[block.type], opacity);
+				for (i in map) {
+					block = map[i];
+					//if (self) if (distance(block, self) > self.visionRange) opacity = 0.95;
+					drawBlock(block.x, block.y, types[block.type], opacity);
+				}
 			}
 		}
 		if (agents) {
@@ -96,17 +88,41 @@
 				drawBlock(block.x, block.y, types[block.type], 1);
 			}
 		}
-	}
-	function drawBlock(x, y, type, opacity) {
-		var color = type.color;
+		endDraw();
+		
+		ctx.save();
 		ctx.beginPath();
+		ctx.arc(self.x * blockWidth, self.y * blockHeight, self.visionRange * blockWidth, 0, Math.PI*2, true);
+		ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+		ctx.lineWidth = 5;
+		ctx.stroke();
+		
+		ctx.beginPath();
+		ctx.arc(self.x * blockWidth + blockWidthOffset, self.y * blockHeight + blockHeightOffset, self.attackRange * blockWidth, 0, Math.PI*2, true);
+		ctx.strokeStyle = "rgba(255, 0, 0, 0.1)";
+		ctx.lineWidth = 2;
+		ctx.stroke();
+		ctx.restore();
+	}
+	var lastType;
+	var lastFill;
+	var color;
+	function drawBlock(x, y, type, opacity) {
+		if (lastType !== type) {
+			ctx.fill();
+			ctx.beginPath();
+			color = type.color;
+			ctx.fillStyle = lastFill = "rgb(" + Math.floor(color.r*opacity) + "," + Math.floor(color.g*opacity) + "," + Math.floor(color.b*opacity) + ");";
+		}
 		ctx.rect(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
-		ctx.fillStyle = "rgba(" + color.r + "," + color.g + "," + color.b + ", " + opacity +");"
+		lastType = type;
+	}
+	function endDraw() {
 		ctx.fill();
-	}	
-	
+	}
 
-	
+
+
 	function Agent(action, conn) {
 		var agent = this;
 	
@@ -126,6 +142,10 @@
 		conn.onmessage = function (e) {
 			var world = JSON.parse(e.data);
 	
+			if (width !== world.width || height !== world.height) {
+				c.width = (width = world.width) * blockWidth;
+				c.height = (height = world.height) * blockHeight;
+			}
 			worldView.tps = world.tps;
 			worldView.age = world.age;
 			self = worldView.self = world.self;

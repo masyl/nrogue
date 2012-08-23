@@ -10,6 +10,7 @@
 		agent.type = "player"; // Type of agent
 		agent.health = 1000; // Health
 		agent.visionRange = 40; // Vision range
+		agent.attackRange = 4; // Attack range
 		agent.skips = 9; // Number of ticks the agent has skipped since his last answer
 		agent.next = { // The request for the next tick
 			ready: true,
@@ -22,6 +23,8 @@
 			if (agent.next.ready) {
 				agent.skips = 0;
 				var worldView = { // todo: all these attributes should be grouped as "attrs" for simpler serialization
+					height: world.height,
+					width: world.width,
 					tps: world.tps,
 					age: world.age,
 					datetime: world.datetime,
@@ -33,7 +36,7 @@
 					var agents = {};
 					for (var key in world.agents) {
 						agent2 = world.agents[key];
-						if (distance(agent, agent2) < agent.visionRange) agents[key] = agent2;
+						if (distance(agent, agent2) < agent .visionRange) agents[key] = agent2;
 					}
 					worldView.agents = agents;
 					// todo: filter by distance

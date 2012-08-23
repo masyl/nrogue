@@ -39,6 +39,8 @@
 - War: Agent has a specific "strength" for his attack
 - War: Agent tries to attack another agent once in range
 - War: An agents attack covers X blocks
+- War: Attack on click or keystroke
+- Only show attack range on attack
 - War: An agents looses health if he is "hit" by an attack
 - War: An attacker agent knows if an attack was a hit or a miss
 - War: Once an agent has no more health he is dead
