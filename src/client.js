@@ -10,8 +10,8 @@
 	var target = null;
 	var width; // map width
 	var height; // map height
-	var blockHeight = 6;
-	var blockWidth = 6;
+	var blockHeight = 5;
+	var blockWidth = 5;
 	var blockHeightOffset = 3;
 	var blockWidthOffset = 3;
 	var isDrawing = true;
@@ -56,7 +56,6 @@
 	}
 
 
-	var i;
 	var html = "";
 	var types;
 	var type;
@@ -66,49 +65,51 @@
 	var block;
 	var opacity;
 	var self;
-	var agents;
-	var frameMax = 0;
-	var frame = frameMax;
+	var mapCache;
+	var lastType;
+	var lastFill;
+	var color;
+
 	function drawMap(action) {
-		frame++;
-		if (map) {
-			if (frame > frameMax) {
-				frame = 0;
-				opacity = 1;
-				for (i in map) {
-					block = map[i];
-					//if (self) if (distance(block, self) > self.visionRange) opacity = 0.95;
-					drawBlock(block.x, block.y, types[block.type], opacity);
-				}
+		var i;
+		if (map && !mapCache) {
+			startDraw();
+			opacity = 1;
+			for (i in map) {
+				block = map[i];
+				//if (self) if (distance(block, self) > self.visionRange) opacity = 0.95;
+				drawBlock(block.x, block.y, types[block.type], opacity);
 			}
+			endDraw();
+			mapCache = ctx.getImageData(0, 0, width * blockWidth, height * blockHeight);
+		} else if (map && mapCache) {
+			ctx.putImageData(mapCache, 0, 0);
 		}
 		if (agents) {
+			startDraw();
 			for (i in agents) {
 				block = agents[i];
 				drawBlock(block.x, block.y, types[block.type], 1);
 			}
+			endDraw();
 		}
-		endDraw();
 		
-		ctx.save();
-		ctx.beginPath();
-		ctx.arc(self.x * blockWidth, self.y * blockHeight, self.visionRange * blockWidth, 0, Math.PI*2, true);
-		ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
-		ctx.lineWidth = 5;
-		ctx.stroke();
+//		ctx.save();
+//		ctx.beginPath();
+//		ctx.arc(self.x * blockWidth, self.y * blockHeight, self.visionRange * blockWidth, 0, Math.PI*2, true);
+//		ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+//		ctx.lineWidth = 5;
+//		ctx.stroke();
 		
-		if (action.attack) {
-			ctx.beginPath();
-			ctx.arc(self.x * blockWidth + blockWidthOffset, self.y * blockHeight + blockHeightOffset, self.attackRange * blockWidth, 0, Math.PI*2, true);
-			ctx.strokeStyle = "rgba(255, 64, 64, 0.4)";
-			ctx.lineWidth = 2;
-			ctx.stroke();
-			ctx.restore();
-		}
+//		if (action.attack) {
+//			ctx.beginPath();
+//			ctx.arc(self.x * blockWidth + blockWidthOffset, self.y * blockHeight + blockHeightOffset, self.attackRange * blockWidth, 0, Math.PI*2, true);
+//			ctx.strokeStyle = "rgba(255, 64, 64, 0.4)";
+//			ctx.lineWidth = 2;
+//			ctx.stroke();
+//			ctx.restore();
+//		}
 	}
-	var lastType;
-	var lastFill;
-	var color;
 	function drawBlock(x, y, type, opacity) {
 		if (lastType !== type) {
 			ctx.fill();
@@ -118,6 +119,9 @@
 		}
 		ctx.rect(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
 		lastType = type;
+	}
+	function startDraw() {
+		ctx.beginPath();
 	}
 	function endDraw() {
 		ctx.fill();
@@ -145,8 +149,8 @@
 			var world = JSON.parse(e.data);
 	
 			if (width !== world.width || height !== world.height) {
-				c.width = (width = world.width) * blockWidth;
-				c.height = (height = world.height) * blockHeight;
+				width = (width = world.width) * blockWidth;
+				height = (height = world.height) * blockHeight;
 			}
 			worldView.tps = world.tps;
 			worldView.age = world.age;
@@ -171,8 +175,9 @@
 			};
 	
 			agent.send(action);
-
+			console.time("a");
 			if (isDrawing) drawMap(action);
+			console.timeEnd("a");
 		};
 		agent.send = function (obj) {
 			conn.send(JSON.stringify(obj));
@@ -195,7 +200,7 @@
 		for (key in world.agents) {
 			agent = world.agents[key];
 			if  (agent.id !== selfId) {
-				var dist = distance(agent, self);
+				var dist = getDistance(agent, self);
 				if (dist < self.attackRange) {
 					if (dist < attackTargetDist) {
 						attackTarget = agent;
@@ -217,32 +222,8 @@
 		var dir = self.dir;
 		if (target) {
 			doMove = 1;
-			if (self.x > target.x) {
-				if (self.y > target.y) {
-					dir = 7;
-				} else if (self.y == target.y) {
-					dir = 6;
-				} else {
-					dir = 5;
-				}
-			} else if (self.x == target.x) {
-				if (self.y > target.y) {
-					dir = 0;
-				} else if (self.y == target.y) {
-					dir = 0;
-					doMove = 0;
-				} else {
-					dir = 4;
-				}
-			} else {
-				if (self.y > target.y) {
-					dir = 1;
-				} else if (self.y == target.y) {
-					dir = 2;
-				} else {
-					dir = 3;
-				}
-			}
+			var angle = getAngle(self, target);
+			dir = Math.round(angle / (360 / 8));
 		} else {
 			var doMove = rnd(4);
 			var change = rnd(3);
@@ -262,8 +243,14 @@
 	console.log("spawned agents!", agents);
 
 
-	function distance(point1, point2) {
+	function getDistance(point1, point2) {
 		return Math.sqrt( Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2) );
+	}
+	function getAngle(point1, point2) {
+		var angle = Math.atan2(point1.x - point2.x, point1.y - point2.y) * (180 / Math.PI);
+		if(angle < 0) angle = Math.abs(angle);
+		else angle = 360 - angle;
+		return angle;
 	}
 
 })();
