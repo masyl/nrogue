@@ -1,0 +1,24 @@
+- DONE: Agents spawn at a random point
+- DONE: By default maps borders warp to the other side
+- DONE: Map: Generate trees (obstacle)
+- DONE Map: Generate rocks & boulders (obstacle)
+- DONE: Client: Show stats on visible agents
+- DONE: Agents that skip more than X cycles will slowly start to loose health (lack of breathing ?)
+- DONE: Client: User directs his agent with his mouse
+- DONE: Agent goes back in automatic mode when the mouse is not on the map
+- DONE: Client: Highlight the player's agent among others
+- DONE: Apply "vision" limit when sending the list of agents to a client
+- DONE: Implemented "fog of war" vision
+- DONE: Re-implement map display in Canvas
+- DONE: War: Agent tries to attack another agent once in range
+- DONE: War: Agent has a specific "range" for his attack
+- DONE: War: Agent has a specific "strength" for his attack
+- DONE: War: An agents attack covers X blocks
+- DONE: Only show attack range on attack
+- DONE: War: Once an agent has no more health he is dead
+- DONE: Map: Dont warp on map boundaries
+- DONE: Server/AI: spawn agents with "zombie" rule set from server
+- FIXED: Time doesnt display anymore
+- FIXED: Day night cycle not showing anymore
+
+

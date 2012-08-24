@@ -1,40 +1,22 @@
+
 # OPEN QUESTIONS
+
 - Should zombies also be spawned by the browser? With the server controlling when each
   client are allowed to spawn zombies ? (it would save time, bytes and cpu)
 - Should maps also be created by the clients ?
 
 # BUGS
+
 - agent doesnt get back authonomy once the mouse move out of focus
 - Players agent not highlighted anymore
-- Time doesnt display anymore
-- Day night cycle not showing anymore
 
 # TODO
-- DONE: Agents spawn at a random point
-- DONE: By default maps borders warp to the other side
-- DONE: Map: Generate trees (obstacle)
-- DONE Map: Generate rocks & boulders (obstacle)
-- DONE: Client: Show stats on visible agents
-- DONE: Agents that skip more than X cycles will slowly start to loose health (lack of breathing ?)
-- DONE: Client: User directs his agent with his mouse
-- DONE: Agent goes back in automatic mode when the mouse is not on the map
-- DONE: Client: Highlight the player's agent among others
-- DONE: Apply "vision" limit when sending the list of agents to a client
-- DONE: Implemented "fog of war" vision
-- DONE: Re-implement map display in Canvas
 
-- DONE: War: Agent tries to attack another agent once in range
-- DONE: War: Agent has a specific "range" for his attack
-- DONE: War: Agent has a specific "strength" for his attack
-- DONE: War: An agents attack covers X blocks
-- DONE: Only show attack range on attack
-- DONE: War: Once an agent has no more health he is dead
-- DONE: Map: Dont warp on map boundaries
-- DONE: Server/AI: spawn agents with "zombie" rule set from server
-
-- HUD: Should players agent health and HITS in obvious easy to read UI
+- Spawn zombies with specific attributes for range and strength
+- Zombies agents should be drawn red
 - War: Respawn upon death instead of disconnecting
 
+- HUD: Should players agent health and HITS in obvious easy to read UI
 - War: Delay before respawning
 - War: Show where an attack landed
 - War: Attacks have a reload delay enforced
@@ -59,10 +41,12 @@
 - Build process for optimization and packaging
 
 # AWESOME MUSTS
+
 - Drop mines (behave like agents ?)
 - Dead agents leave a blood trace
 
 # AWESOME MAYBE
+
 - Buildings with doors that can be activated
 - Zombie that are attracted by noise
 - Zombies a lot more active during the night
@@ -74,6 +58,7 @@
 - try Audio : http://fabiogianini.ch/?p=75
 
 # AFTER JS13K
+
 - Suicide command
 - Re-spawn command (instead of reload)
 - Map: Generate roads
