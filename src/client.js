@@ -9,7 +9,7 @@
 	var target = null;
 	var width; // map width
 	var height; // map height
-	var blockSize = 5;
+	var blockSize = 7;
 	var blockOffset = 3;
 	var isDrawing = true;
 	var types;
@@ -132,7 +132,7 @@
 
 		// draw vision range
 		ctx.beginPath();
-		ctx.arc(self.x * blockSize, self.y * blockSize, self.visionRange * blockSize, 0, Math.PI*2, true);
+		ctx.arc(self.x * blockSize, self.y * blockSize, self.vision * blockSize, 0, Math.PI*2, true);
 		ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
 		ctx.lineWidth = 5;
 		ctx.stroke();

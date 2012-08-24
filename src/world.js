@@ -118,6 +118,9 @@
 							y2 = agent.y;
 						}
 					}
+					// Adjust vision according to health
+					if (agent.type === "human")
+						agent.vision = agent.visionRange * (agent.health/1000);
 	
 					// Set new coords
 					agent.x = x2;

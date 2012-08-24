@@ -25,6 +25,7 @@
 		agent.type = "human"; // Type of agent
 		agent.health = 1000; // Health
 		agent.visionRange = 30; // Vision range
+		agent.vision = agent.visionRange; // Adjusted vision range
 		agent.attackRange = 4; // Attack range
 		agent.attackSize = 2; // Attack size
 		agent.attackStrength = 100; // Attack strength
@@ -54,7 +55,7 @@
 					var agents = {};
 					for (var key in world.agents) {
 						agent2 = world.agents[key];
-						if (distance(agent, agent2) < agent .visionRange) agents[key] = agent2;
+						if (distance(agent, agent2) < agent .vision) agents[key] = agent2;
 					}
 					worldView.agents = agents;
 					// todo: filter by distance

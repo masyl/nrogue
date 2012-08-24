@@ -14,28 +14,6 @@ h1, h2, h3 {
 #map {
     z-index: 10000;
 }
-
-#infos {
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    width: 240px;
-    display: block;
-    background: #222;
-}
-
-#agentList {
-    margin:0;
-    padding:0;
-    list-style: none;
-}
-
-#infos h1 {
-    border-bottom: 2px solid #999;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-}
-
 .block {text-indent: -1000em;}
 .block.isSelf {
     background-color: #44FF44 !important;
@@ -48,8 +26,8 @@ h1, h2, h3 {
 #grids {
     height: 100%;
     position: absolute;
-    left: 260px;
-    top: 10px;
+    left: 0px;
+    top: 0px;
     display: block;
 }
 #c {
