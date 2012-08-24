@@ -15,7 +15,7 @@
 	};
 
 	var g = require("./g");// Global package
-	module.exports = function Agent(id, x, y, conn, ai, end, react) {
+	module.exports = function Agent(birth, id, x, y, conn, ai, end, react) {
 		// defaults are for a human agent
 		var agent = this;
 		agent.id = id+""; // A unique id given by the world
@@ -23,6 +23,8 @@
 		agent.y = y; // X coordinate on the map
 		agent.dir = g.rnd(8); // Which direction the agent is facing
 		agent.type = "human"; // Type of agent
+		agent.birth = birth; // At which tick the agent was bord
+		agent.age = 0; // Number of "ticks" the agent has survived
 		agent.health = 1000; // Health
 		agent.visionRange = 30; // Vision range
 		agent.vision = agent.visionRange; // Adjusted vision range
@@ -30,6 +32,7 @@
 		agent.attackSize = 2; // Attack size
 		agent.attackStrength = 100; // Attack strength
 		agent.skips = 0; // Number of ticks the agent has skipped since his last answer
+		agent.kills = 0; // Number of killed agents since spawning
 		agent.next = { // The request for the next tick
 			ready: true,
 			agents: true,

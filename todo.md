@@ -10,7 +10,8 @@
 
 - Mode: Resting: gain back health when user stops moving for long enough
 - Mode: Exaustion: loose health when has been running for too long
-
+- Humans dont attack humans
+- Floors should not regenerate past 75%
 - War: Zombies swarm on humans 
 - War: Zombies dont attack zombies
 - War: Delay before respawning
@@ -24,7 +25,6 @@
 - Build process for optimization and packaging
 
 GAMEPLAY POSSIBILITIES:
-- Show kill count
 - Med packs
 - Weapons
 - Missions: Go grab "abc" at coord X/Y, kill XX zombies, etc... 

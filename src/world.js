@@ -38,9 +38,9 @@
 			agentsCount++;
 			
 			if (conn) {
-				agent = new Agent(agentsCount, g.rnd(world.width-10)+5, g.rnd(world.height-10)+5, conn, null, end, react);
+				agent = new Agent(world.age, agentsCount, g.rnd(world.width-10)+5, g.rnd(world.height-10)+5, conn, null, end, react);
 			} else {
-				agent = new Agent(agentsCount, g.rnd(world.width-10)+5, g.rnd(world.height-10)+5, null, ai, end, react);
+				agent = new Agent(world.age, agentsCount, g.rnd(world.width-10)+5, g.rnd(world.height-10)+5, null, ai, end, react);
 			}
 			if (middleware) middleware(agent);
 	
@@ -49,6 +49,8 @@
 				var agent2;
 				var key;
 				var dist;
+
+				// Perform attack logic
 				if (action.attack) {
 					for (key in world.agents) {
 						agent2 = world.agents[key];
@@ -56,6 +58,7 @@
 						if (dist < agent.attackSize) {
 							agent2.health += -agent.attackStrength;
 						}
+						if (agent2.health <= 0) agent.kills++;
 					}
 				}
 
@@ -129,6 +132,9 @@
 						
 						if (agent.health > 1000) agent.health = 1000;
 					}
+
+					// Update age
+					agent.age = world.age - agent.birth;
 
 					// Set new coords
 					agent.x = x2;

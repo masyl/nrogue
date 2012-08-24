@@ -164,13 +164,15 @@
 		ctx.fillStyle = "rgba(0,0,0,0.3)";
 		ctx.rect(0, 0, width * blockSize, 50);
 		ctx.fill();
-
-		// Draw datetime
-		ctx.beginPath();
+		// Font style
 		ctx.font = "bold 18pt monospace";
 		ctx.fontWeight = 800;
 		ctx.fillStyle = "rgba(255, 255, 255, 1)";
+		// Draw datetime
 		ctx.fillText("t" + pad(datetime.getHours(), "00", 2) + ":" + pad(datetime.getMinutes(), "00", 2), 10, 30);
+		// Draw kills
+		ctx.fillText(self.kills + " kills", 140, 30);
+		ctx.fillText(self.age + " lifespan", 280, 30);
 
 		function pad(str, padding, size) {
 			str = padding + str;
