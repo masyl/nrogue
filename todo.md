@@ -1,7 +1,6 @@
 
 # BUGS
 
-- agent doesnt get back authonomy once the mouse move out of focus
 - Sunlight level doesnt match the correct time
 
 # TODO

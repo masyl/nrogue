@@ -50,7 +50,11 @@
 			e.preventDefault();
 		};
 	
+		canvas.onmouseout = function (e) {
+			target = null;
+		};
 		canvas.onmousemove = function(e) {
+			e.preventDefault();
 			var x = Math.floor((e.layerX)/ blockWidth);
 			var y = Math.floor((e.layerY)/ blockHeight);
 			if (isNaN(x)) {
