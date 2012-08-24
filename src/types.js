@@ -32,10 +32,22 @@ module.exports = {
 		color: {r:240, g:128, b:128},
 		solid: false
 	},
-	"player": {
+	"you": {
 		symbol: "@",
-		label: "Player",
+		label: "You",
+		color: {r:0, g:255, b:0},
+		solid: false
+	},
+	"human": {
+		symbol: "@",
+		label: "Human",
 		color: {r:255, g:255, b:255},
+		solid: false
+	},
+	"zombie": {
+		symbol: "@",
+		label: "Zombie",
+		color: {r:230, g:30, b:30},
 		solid: false
 	}
 };

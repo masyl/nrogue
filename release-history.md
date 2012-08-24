@@ -20,5 +20,8 @@
 - DONE: Server/AI: spawn agents with "zombie" rule set from server
 - FIXED: Time doesnt display anymore
 - FIXED: Day night cycle not showing anymore
+- DONE: War: An agents looses health if he is "hit" by an attack
+- DONE: Spawn zombies with specific attributes for range and strength
+- DONE: Zombies agents should be drawn red
 
 

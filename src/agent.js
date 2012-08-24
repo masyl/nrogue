@@ -24,11 +24,11 @@
 		agent.dir = g.rnd(8); // Which direction the agent is facing
 		agent.type = "player"; // Type of agent
 		agent.health = 1000; // Health
-		agent.visionRange = 40; // Vision range
+		agent.visionRange = 30; // Vision range
 		agent.attackRange = 4; // Attack range
 		agent.attackSize = 2; // Attack size
 		agent.attackStrength = 100; // Attack strength
-		agent.skips = 9; // Number of ticks the agent has skipped since his last answer
+		agent.skips = 0; // Number of ticks the agent has skipped since his last answer
 		agent.next = { // The request for the next tick
 			ready: true,
 			agents: true,

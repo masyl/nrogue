@@ -5,7 +5,7 @@
 	var types = require("./types");
 	var mapGenerator = require("./maps/outside");
 	
-	module.exports = function World(width, height, density) {
+	module.exports = function World(width, height, zombies, density) {
 	
 		var
 			world = this,
@@ -22,7 +22,7 @@
 		world.agentsCount = 0;
 		world.datetime = new Date();
 		world.sunlight = 1;
-		world.spawn = function(conn, ai) {
+		world.spawn = function(conn, ai, middleware) {
 			var agent;
 
 			agentsCount++;
@@ -32,6 +32,7 @@
 			} else {
 				agent = new Agent(agentsCount, g.rnd(world.width-10)+5, g.rnd(world.height-10)+5, null, ai, end, react);
 			}
+			if (middleware) middleware(agent);
 	
 			function react(action) {
 				//console.log("react:", action.dir, action.walk);
@@ -130,9 +131,16 @@
 			if (tickPerSeconds) world.tps = tickPerSeconds;
 			if (secondsPerTick) world.spt = secondsPerTick;
 			
-			// Spawn 10 zombies
-			for (var i = 0; i < 10; i++) {
-				this.spawn(null, ai.zombie);
+			// Spawn zombies
+			for (var i = 0; i < zombies; i++) {
+				this.spawn(null, ai.zombie, function (agent) {
+					agent.type = "zombie";
+					agent.health = 500; // Health
+					agent.visionRange = 20; // Vision range
+					agent.attackRange = 1; // Attack range
+					agent.attackSize = 1; // Attack size
+					agent.attackStrength = 200; // Attack strength
+				});
 			}
 
 			setInterval(function () {

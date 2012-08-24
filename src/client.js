@@ -11,8 +11,8 @@
 	var target = null;
 	var width; // map width
 	var height; // map height
-	var blockHeight = 3;
-	var blockWidth = 3;
+	var blockHeight = 5;
+	var blockWidth = 5;
 	var blockHeightOffset = 3;
 	var blockWidthOffset = 3;
 	var isDrawing = true;
@@ -98,7 +98,7 @@
 			for (i in map) {
 				block = map[i];
 				//if (self) if (distance(block, self) > self.visionRange) opacity = 0.95;
-				drawBlock(block.x, block.y, types[block.type], opacity);
+				drawBlock(block.x, block.y, types[block.type]);
 			}
 			endDraw();
 			mapCache = ctx.getImageData(0, 0, width * blockWidth, height * blockHeight);
@@ -119,8 +119,13 @@
 		if (agents) {
 			startDraw();
 			for (i in agents) {
-				block = agents[i];
-				drawBlock(block.x, block.y, types[block.type], 1);
+				agent = agents[i];
+				if (agent.id === self.id) {
+					type = types["you"];
+				} else {
+					type = types[agent.type];
+				}
+				drawBlock(agent.x, agent.y, type);
 			}
 			endDraw();
 		}
@@ -209,8 +214,8 @@
 			var world = JSON.parse(e.data);
 
 			if (width !== world.width || height !== world.height) {
-				ctx.width = (width = world.width) * blockWidth;
-				ctx.height = (height = world.height) * blockHeight;
+				canvas.width = (width = world.width) * blockWidth;
+				canvas.height = (height = world.height) * blockHeight;
 			}
 			worldView.tps = world.tps;
 			worldView.age = world.age;

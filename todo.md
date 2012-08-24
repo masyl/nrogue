@@ -8,26 +8,28 @@
 # BUGS
 
 - agent doesnt get back authonomy once the mouse move out of focus
-- Players agent not highlighted anymore
+- When only the player is sight he is not highlighted
+- Sunlight level doesnt match the correct time
 
 # TODO
 
-- Spawn zombies with specific attributes for range and strength
-- Zombies agents should be drawn red
 - War: Respawn upon death instead of disconnecting
-
+- Respawn zombies automatically
 - HUD: Should players agent health and HITS in obvious easy to read UI
+
+- Mode: Resting: gain back health when user stops moving for long enough
+- Mode: Exaustion: loose health when has been running for too long
+
 - War: Delay before respawning
 - War: Show where an attack landed
 - War: Attacks have a reload delay enforced
 - War: Attacks make some noise or obvious visual queue
-- War: Attack on click or keystroke
-- War: An agents looses health if he is "hit" by an attack
 - War: An attacker agent knows if an attack was a hit or a miss
 - War: Once an agent is dead he is disconnected and the client must respawn by reconnecting
 - War: Agent has a recuperation rate to gain back health slowly when standing still
 - War: Agent cant attack or be attacked inside a house (on floor)
 - War: Zombies can't enter a house (cant step on "floor")
+- UI: Correct display of fog of war, with lighter in, darker out
 
 - Optimization: Sync map redraw on requestAnimationFrame.
 - Map: Generate ponds
