@@ -47,17 +47,24 @@
 		}
 	
 		var dir = self.dir;
+		// Setup random move
+		var doMove = global.rnd(4);
+		var change = global.rnd(3);
+		var dirChange = global.rnd(3);
+		// If a target was found, there is 1 chance out of two
+		// that the zombie will follow
 		if (visionTarget) {
-			dist = global.getDistance(self, visionTarget);
-			doMove = global.rnd(2);
-			var angle = global.getAngle(self, visionTarget);
-			dir = Math.round(angle / (360 / 8));
-		} else {
-			var doMove = global.rnd(4);
-			var change = global.rnd(3);
-			var dirChange = global.rnd(3);
-			if (!change) dir = self.dir + dirChange - 1;
+			if (global.rnd(2)) {
+				dist = global.getDistance(self, visionTarget);
+				doMove = 1;
+				var angle = global.getAngle(self, visionTarget);
+				dir = Math.round(angle / (360 / 8));
+			} else {
+				doMove = 1;
+				change = 0;
+			}
 		}
+		if (!change) dir = self.dir + dirChange - 1;
 		move.dir = dir;
 		move.walk = (doMove) ? 1 : 0;
 		return move;

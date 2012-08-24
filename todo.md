@@ -6,7 +6,6 @@
 # TODO
 
 - War: Respawn upon death instead of disconnecting
-- Respawn zombies automatically
 - HUD: Should players agent health and HITS in obvious easy to read UI
 
 - Mode: Resting: gain back health when user stops moving for long enough
@@ -23,6 +22,12 @@
 - War: Zombies can't see a human inside a house
 - Optimization: Sync map redraw on requestAnimationFrame.
 - Build process for optimization and packaging
+
+GAMEPLAY POSSIBILITIES:
+- Show kill count
+- Med packs
+- Weapons
+- Missions: Go grab "abc" at coord X/Y, kill XX zombies, etc... 
 
 # AWESOME MUSTS
 - On the client, run "agent code" in a webworker
