@@ -48,7 +48,6 @@
 	
 		var dir = self.dir;
 		if (visionTarget) {
-			console.log("target", visionTarget.id, visionTarget.type);
 			dist = global.getDistance(self, visionTarget);
 			doMove = global.rnd(2);
 			var angle = global.getAngle(self, visionTarget);
