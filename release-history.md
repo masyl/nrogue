@@ -25,6 +25,7 @@
 - DONE: Zombies agents should be drawn red
 - FIXED: When only the player is sight he is not highlighted
 - FIXED: agent doesnt get back authonomy once the mouse move out of focus
+- DONE: UI: Correct display of fog of war, with lighter in, darker out
 
 
 

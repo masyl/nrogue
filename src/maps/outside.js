@@ -6,8 +6,10 @@
 	var rock = "W";
 	var tower = "WWWW-W  W-W  W-WWWW";
 	var tree = " TT -TTTT-TTTT- TT";
+	var bigTree = " TTT -TTTTT-TTTTT-TTTTT- TTT";
 	var bush = "TT-TT";
-	var house = "WWWWWW-WFFFFW-WFFFFW-WFFFFW-WFFFFW-WWFFWW";
+	var house = "WWWWWW-WFFFFW-WFFFFW-WFFFFW-WFFFFW-WWFFWW-GGGGGG";
+	var bigHouse = "GGGGGGGGGG-WWFFWWWWWW-WFFFFFFFFW-WFFFFFFFFW-WFFFFFFFFW-WFFFFFFFFW-WWWWWWFFFW-WFFFFFFFFW-WFFFFFFFFW-WFFFFFFFFW-WWWWWWFFWW-GGGGGGGGGG";
 	
 	module.exports = function (world) {
 		var grid = {};
@@ -18,8 +20,9 @@
 				grid[block.x+"-"+block.y] = block;
 			}
 		}
-		var materials = {W:"wall",T:"tree", F:"floor"};
-		var stamps = [tower, house, tree, bush, boulder, rock];
+		// Save space by using types directly ?
+		var materials = {W:"wall",T:"tree", F:"floor", G:"grass"};
+		var stamps = [tower, house, house, bigHouse, tree, bigTree, tree, bush, bush, boulder, rock];
 		var count = (g.rnd(12) + 4) * world.density;
 		for (var i = 0; i < count; i++) {
 			stamp(
@@ -29,7 +32,7 @@
 				stamps[g.rnd(stamps.length)],
 				materials); // todo: randomize
 		}
-		console.log("World generation complete");
+		console.log("World built");
 		return grid;
 	};
 	

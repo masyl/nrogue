@@ -130,12 +130,20 @@
 			endDraw();
 		}
 
-		// draw vision range
+		// draw fog-of-war
+		mapWidth = width * blockSize;
+		mapHeight = height * blockSize;
 		ctx.beginPath();
-		ctx.arc(self.x * blockSize, self.y * blockSize, self.vision * blockSize, 0, Math.PI*2, true);
-		ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+		ctx.arc(self.x * blockSize, self.y * blockSize, self.vision * blockSize, 0, Math.PI*2, false);
+		ctx.lineTo(mapWidth, self.y * blockSize);
+		ctx.lineTo(mapWidth, 0);
+		ctx.lineTo(0, 0);
+		ctx.lineTo(0, mapHeight);
+		ctx.lineTo(mapWidth, mapHeight);
+		ctx.lineTo(mapWidth, self.y * blockSize);
+		ctx.fillStyle = "rgba(0,0,0,0.2)";
 		ctx.lineWidth = 5;
-		ctx.stroke();
+		ctx.fill();
 
 		if (action.attack) {
 			ctx.beginPath();

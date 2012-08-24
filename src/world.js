@@ -97,15 +97,12 @@
 						y = -walk;
 					}
 	
-					// Enfore world boundaries
-					// todo: use modulo instead
+					// Enforce world boundaries
 					var x2, y2;
 					x2 = agent.x + x;
-					y2 = agent.y + y;
-	
+					y2 = agent.y + y;	
 					if (x2 >= world.width) x2 = world.width -1;
 					if (x2 < 0) x2 = 0;
-	
 					if (y2 >= world.height) y2 = world.height-1;
 					if (y2 < 0) y2 = 0;
 	
@@ -118,10 +115,21 @@
 							y2 = agent.y;
 						}
 					}
-					// Adjust vision according to health
-					if (agent.type === "human")
+
+					//Human specific behaviors
+					if (agent.type === "human") {
+						// Adjust vision according to health
 						agent.vision = agent.visionRange * (agent.health/1000);
+
+						// Gain back health if standing on a "floor"
+						var block = world.map[agent.x + "-" + agent.y];
+						if (block && (block.type == "floor")) agent.health += 10;
 	
+						// Enforce limit on health
+						
+						if (agent.health > 1000) agent.health = 1000;
+					}
+
 					// Set new coords
 					agent.x = x2;
 					agent.y = y2;
