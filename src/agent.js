@@ -39,7 +39,8 @@
 		agent.act = function (world) {
 			if (agent.next.ready) {
 				agent.skips = 0;
-				var worldView = { // todo: all these attributes should be grouped as "attrs" for simpler serialization
+				var worldView = {
+					// todo: all these attributes should be grouped as "attrs" for simpler serialization
 					height: world.height,
 					width: world.width,
 					tps: world.tps,

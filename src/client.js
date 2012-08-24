@@ -89,6 +89,7 @@
 
 
 	function drawMap(world, action) {
+		lastType = null;
 		var i;
 		
 		// Draw map

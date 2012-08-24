@@ -1,14 +1,7 @@
 
-# OPEN QUESTIONS
-
-- Should zombies also be spawned by the browser? With the server controlling when each
-  client are allowed to spawn zombies ? (it would save time, bytes and cpu)
-- Should maps also be created by the clients ?
-
 # BUGS
 
 - agent doesnt get back authonomy once the mouse move out of focus
-- When only the player is sight he is not highlighted
 - Sunlight level doesnt match the correct time
 
 # TODO
@@ -38,8 +31,9 @@
 - On the client, run "agent code" in a webworker
 - Load agent code from url or from textarea
 - Map: Generate ponds
-- Dead agents leave a blood trace
 - War: If zombie kills a human, human becomes a zombie
+- Human vision range shrinks with opacity
+- Zombie vision range grows with opacity
 
 # AWESOME MAYBE
 
@@ -48,6 +42,12 @@
 - Ability for agent to walk or run (oversampling of ticks)
 
 # AFTER JS13K
+- clients can also create and start maps
+- Keypoints and spans during the day dawn, day, evening, night, midnight
+- Dead agents leave a blood trace
+- Houses are "interior" maps at a different zoom level
+- Procedurally generated map stitched together infinitly
+- A* path finding for humans
 - War: An attacker agent knows if an attack was a hit or a miss
 - Client: "observer" type agent
 - Human: search mode when has enough health
@@ -64,11 +64,6 @@
 - Map: Generate roads
 - Enforce a limit of agent per clients/IPs/browsers
 - Structure world in layers: ground, objects, people, buildings, high-vegetation, clouds.
-
-
-
-# Gameplay
-- Server spawns zombies at regular interval, with a maximum
 
 
 # WebSocket Optimization

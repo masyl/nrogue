@@ -23,5 +23,6 @@
 - DONE: War: An agents looses health if he is "hit" by an attack
 - DONE: Spawn zombies with specific attributes for range and strength
 - DONE: Zombies agents should be drawn red
+- FIXED: When only the player is sight he is not highlighted
 
 
