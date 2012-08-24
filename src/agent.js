@@ -22,7 +22,7 @@
 		agent.x = x; // X coordinate on the map
 		agent.y = y; // X coordinate on the map
 		agent.dir = g.rnd(8); // Which direction the agent is facing
-		agent.type = "player"; // Type of agent
+		agent.type = "human"; // Type of agent
 		agent.health = 1000; // Health
 		agent.visionRange = 30; // Vision range
 		agent.attackRange = 4; // Attack range

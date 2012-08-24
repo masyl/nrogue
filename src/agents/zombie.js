@@ -13,10 +13,10 @@
 		var visionTargetDist = 99999;
 		for (key in world.agents) {
 			agent = world.agents[key];
-			if  (agent.id !== selfId) {
+			if  (agent.id !== selfId && agent.type === "human") {
 				dist = global.getDistance(agent, self);
-				if (dist < self.attackRange) {
-					if (dist < attackTargetDist) {
+				if (dist < self.visionRange) {
+					if (dist < visionTargetDist) {
 						visionTarget = agent;
 						visionTargetDist = dist;
 					}
@@ -48,11 +48,9 @@
 	
 		var dir = self.dir;
 		if (visionTarget) {
-			doMove = 0;
+			console.log("target", visionTarget.id, visionTarget.type);
 			dist = global.getDistance(self, visionTarget);
-			if (dist > 1) {
-				doMove = 1;
-			}
+			doMove = global.rnd(2);
 			var angle = global.getAngle(self, visionTarget);
 			dir = Math.round(angle / (360 / 8));
 		} else {

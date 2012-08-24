@@ -22,6 +22,16 @@
 		world.agentsCount = 0;
 		world.datetime = new Date();
 		world.sunlight = 1;
+		world.spawnZombie = function () {
+			world.spawn(null, ai.zombie, function (agent) {
+				agent.type = "zombie";
+				agent.health = 500; // Health
+				agent.visionRange = 50; // Vision range
+				agent.attackRange = 1; // Attack range
+				agent.attackSize = 1; // Attack size
+				agent.attackStrength = 50; // Attack strength
+			});
+		};
 		world.spawn = function(conn, ai, middleware) {
 			var agent;
 
@@ -121,6 +131,10 @@
 			}
 	
 			function end() {
+				// Spawn a new zombie
+				if (agent.type == "zombie") world.spawnZombie();
+				// todo: enfore zombie limit
+				// Delete dead agent
 				delete world.agents[agent.id];
 			}
 	
@@ -133,14 +147,7 @@
 			
 			// Spawn zombies
 			for (var i = 0; i < zombies; i++) {
-				this.spawn(null, ai.zombie, function (agent) {
-					agent.type = "zombie";
-					agent.health = 500; // Health
-					agent.visionRange = 20; // Vision range
-					agent.attackRange = 1; // Attack range
-					agent.attackSize = 1; // Attack size
-					agent.attackStrength = 200; // Attack strength
-				});
+				this.spawnZombie();
 			}
 
 			setInterval(function () {
@@ -155,6 +162,7 @@
 			datetime.setSeconds(datetime.getSeconds() + world.spt);
 	
 			// Adjust sunlight
+			var a = new Date();
 			var hours = datetime.getHours() + datetime.getMinutes() / 60;
 			world.sunlight = 1 - Math.abs(hours - 12) / 12;
 	
