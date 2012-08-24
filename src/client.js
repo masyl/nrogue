@@ -2,8 +2,6 @@
 	window.ai = {};
 	var d = document;
 	d.g = d.getElementById;
-	var agentList = d.g("agentList");
-	var worldStats = d.g("worldStats");
 	var mapGrid = d.g("map");
 	var agentsGrid = d.g("agents");
 	var canvas = d.g("c");
@@ -11,12 +9,9 @@
 	var target = null;
 	var width; // map width
 	var height; // map height
-	var blockHeight = 5;
-	var blockWidth = 5;
-	var blockHeightOffset = 3;
-	var blockWidthOffset = 3;
+	var blockSize = 5;
+	var blockOffset = 3;
 	var isDrawing = true;
-	var html = "";
 	var types;
 	var type;
 	var agent;
@@ -55,8 +50,8 @@
 		};
 		canvas.onmousemove = function(e) {
 			e.preventDefault();
-			var x = Math.floor((e.layerX)/ blockWidth);
-			var y = Math.floor((e.layerY)/ blockHeight);
+			var x = Math.floor((e.layerX)/ blockSize);
+			var y = Math.floor((e.layerY)/ blockSize);
 			if (isNaN(x)) {
 				target = null;
 			} else {
@@ -106,7 +101,7 @@
 				drawBlock(block.x, block.y, types[block.type]);
 			}
 			endDraw();
-			mapCache = ctx.getImageData(0, 0, width * blockWidth, height * blockHeight);
+			mapCache = ctx.getImageData(0, 0, width * blockSize, height * blockSize);
 		} else if (map && mapCache) {
 			ctx.putImageData(mapCache, 0, 0);
 		}
@@ -115,7 +110,7 @@
 		ctx.save();
 		ctx.beginPath();
 		ctx.fillStyle = "rgba(0,0,0," + (world.sunlight * 0.7) + ")";
-		ctx.rect(0, 0, width * blockWidth, height * blockHeight);
+		ctx.rect(0, 0, width * blockSize, height * blockSize);
 		ctx.fill();
 		ctx.restore();
 
@@ -137,34 +132,51 @@
 
 		// draw vision range
 		ctx.beginPath();
-		ctx.arc(self.x * blockWidth, self.y * blockHeight, self.visionRange * blockWidth, 0, Math.PI*2, true);
+		ctx.arc(self.x * blockSize, self.y * blockSize, self.visionRange * blockSize, 0, Math.PI*2, true);
 		ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
 		ctx.lineWidth = 5;
 		ctx.stroke();
 
 		if (action.attack) {
 			ctx.beginPath();
-			ctx.arc(self.x * blockWidth + blockWidthOffset, self.y * blockHeight + blockHeightOffset, self.attackRange * blockWidth, 0, Math.PI*2, true);
+			ctx.arc(self.x * blockSize + blockOffset, self.y * blockSize + blockOffset, self.attackRange * blockSize, 0, Math.PI*2, true);
 			ctx.strokeStyle = "rgba(255, 64, 64, 0.4)";
 			ctx.lineWidth = 2;
 			ctx.stroke();
 			ctx.restore();
 		}
 
+	}
+
+	function drawHUD(world) {
+		var datetime = new Date(world.datetime);
+
 		// Draw heading
 		ctx.beginPath();
 		ctx.fillStyle = "rgba(0,0,0,0.3)";
-		ctx.rect(0, 0, width * blockWidth, 50);
+		ctx.rect(0, 0, width * blockSize, 50);
 		ctx.fill();
-		drawTime(new Date(world.datetime));
-	}
 
-	function drawTime(datetime) {
+		// Draw datetime
 		ctx.beginPath();
-		ctx.font = "bold 14pt monospace";
+		ctx.font = "bold 18pt monospace";
 		ctx.fontWeight = 800;
 		ctx.fillStyle = "rgba(255, 255, 255, 1)";
-		ctx.fillText(datetime.toTimeString().split(" ")[0], 10, 30);
+		ctx.fillText("t" + pad(datetime.getHours(), "00", 2) + ":" + pad(datetime.getMinutes(), "00", 2), 10, 30);
+
+		function pad(str, padding, size) {
+			str = padding + str;
+			str = str.substring(str.length-size);
+			return str;
+		}
+
+		// Draw health
+		ctx.beginPath();
+		ctx.font = "bold 18pt monospace";
+		ctx.fontWeight = 800;
+		ctx.fillStyle = "rgba(255, 255, 255, 1)";
+		// todo: blockHeight and blockHeight should be the same var
+		ctx.fillText(Math.round(self.health/10) + "%", width * blockSize - 75, 30);
 	}
 
 	function drawBlock(x, y, type) {
@@ -174,7 +186,7 @@
 			color = type.color;
 			ctx.fillStyle = lastFill = "rgba(" + Math.floor(color.r) + "," + Math.floor(color.g) + "," + Math.floor(color.b) + ", 1);";
 		}
-		ctx.rect(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
+		ctx.rect(x * blockSize, y * blockSize, blockSize, blockSize);
 		lastType = type;
 	}
 
@@ -185,18 +197,6 @@
 	function endDraw() {
 		ctx.fill();
 	}
-
-
-
-	function drawAgentList(agents) {
-		var html = "", agent;
-		for (var i in agents) {
-			agent = agents[i];
-			html += "<li>" + (Math.round(agent.health / 10)) + " - " + agent.id + " - " + agent.type + "</li>";
-		}
-		agentList.innerHTML = html;
-	}
-
 
 
 	function Agent(action, conn) {
@@ -219,8 +219,8 @@
 			var world = JSON.parse(e.data);
 
 			if (width !== world.width || height !== world.height) {
-				canvas.width = (width = world.width) * blockWidth;
-				canvas.height = (height = world.height) * blockHeight;
+				canvas.width = (width = world.width) * blockSize;
+				canvas.height = (height = world.height) * blockSize;
 			}
 			worldView.tps = world.tps;
 			worldView.age = world.age;
@@ -237,7 +237,6 @@
 
 			if (world.agents) {
 				agents = worldView.agents = world.agents;
-				drawAgentList(world.agents);
 			}
 
 			var action = agent.action(worldView, world.self, target);
@@ -250,7 +249,10 @@
 			agent.send(action);
 
 //			console.time("draw");
-			if (isDrawing) drawMap(worldView, action);
+			if (isDrawing){
+				drawMap(worldView, action);
+				drawHUD(world);
+			}
 //			console.timeEnd("draw");
 		};
 		agent.send = function (obj) {
