@@ -1,5 +1,5 @@
 (function () {
-	var g = require("../g");// Global package
+	var g = require("./g");// Global package
 	var Block = g.Block;
 	
 	var boulder = "WWW-WWW-WWW";

@@ -1,19 +1,5 @@
 (function (global) {
 
-	//todo: GET RID OF GLOBAL DUPLICATION BETWEEN FRONT AND BACKEND
-	global.getDistance = function (point1, point2) {
-		return Math.sqrt( Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2) );
-	};
-	global.getAngle = function (point1, point2) {
-		var angle = Math.atan2(point1.x - point2.x, point1.y - point2.y) * (180 / Math.PI);
-		if(angle < 0) angle = Math.abs(angle);
-		else angle = 360 - angle;
-		return angle;
-	};
-	global.rnd = function (i) {
-		return Math.floor(Math.random() * i)
-	};
-
 	var g = require("./g");// Global package
 	module.exports = function Agent(birth, id, x, y, conn, ai, end, react) {
 		// defaults are for a human agent

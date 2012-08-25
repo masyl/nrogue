@@ -1,0 +1,1 @@
+(function(e){var t=e;e.ai.human=function(e,n,r){var i={},s,o,u,a=999,f,l=n.dir,c=n.id,h,p,d,v;for(o in e.agents)f=e.agents[o],f.id!==c&&(s=t.dist(f,n),s<n.attackRange&&s<a&&(u=f,a=s));return u&&r&&(i.attack={x:u.x,y:u.y}),r?(h=0,s=t.dist(n,r),s>1&&(h=1),v=t.ang(n,r),l=Math.round(v/45)):(h=t.rnd(4),p=t.rnd(3),d=t.rnd(3),p||(l=n.dir+d-1)),i.dir=l,i.walk=h?1:0,i}})(this)

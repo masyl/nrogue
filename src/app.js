@@ -1,14 +1,14 @@
 (function () {
 var
 	r = require,
-	World = r('./src/world'),
-	static = r('./src/static'),
+	World = r('./world'),
+	static = r('./g').s,
 	webSocketServer = r('./websocket');
 
 function startServer(world) {
 	// Setup world state server
 	new webSocketServer({
-		httpServer: static(process.cwd() + "/src", 5000)
+		httpServer: static(process.cwd(), 5000)
 	}).on('connect', function(conn) {
 		world.spawn(conn);
 	});

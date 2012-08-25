@@ -5,26 +5,22 @@
 
 # TODO
 
+## MUSTS
 - War: Respawn upon death instead of disconnecting
 - HUD: Should players agent health and HITS in obvious easy to read UI
+- Humans dont attack humans by default (collab)
+- War: Delay before respawning
+- War: Attacks have a reload delay enforced
 
+## NICE TO HAVE
+- Optimization: Sync map redraw on requestAnimationFrame.
 - Mode: Resting: gain back health when user stops moving for long enough
 - Mode: Exaustion: loose health when has been running for too long
-- Humans dont attack humans
 - Floors should not regenerate past 75%
-- War: Zombies swarm on humans 
-- War: Zombies dont attack zombies
-- War: Delay before respawning
 - War: Show where an attack landed
-- War: Attacks have a reload delay enforced
-- War: Attacks makes obvious visual cue
-- War: Agent cant attack or be attacked inside a house (on floor)
-- War: Zombies can't enter houses (cant step on "floor")
-- War: Zombies can't see a human inside a house
-- Optimization: Sync map redraw on requestAnimationFrame.
 - Build process for optimization and packaging
 
-GAMEPLAY POSSIBILITIES:
+## GAMEPLAY POSSIBILITIES:
 - Med packs
 - Weapons
 - Missions: Go grab "abc" at coord X/Y, kill XX zombies, etc... 
@@ -44,6 +40,7 @@ GAMEPLAY POSSIBILITIES:
 - Ability for agent to walk or run (oversampling of ticks)
 
 # AFTER JS13K
+- Vision range shrink at night
 - Hospitals with block types that regenerate agent instantly
 - clients can also create and start maps
 - Keypoints and spans during the day dawn, day, evening, night, midnight
@@ -67,7 +64,7 @@ GAMEPLAY POSSIBILITIES:
 - Map: Generate roads
 - Enforce a limit of agent per clients/IPs/browsers
 - Structure world in layers: ground, objects, people, buildings, high-vegetation, clouds.
-
+- Attacks cant go through walls
 
 # WebSocket Optimization
 - Remove constants.js

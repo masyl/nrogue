@@ -1,9 +1,9 @@
 (function () {
 	var g = require("./g");
-	var ai = require("./agents/zombie").ai;
+	var ai = require("./z").ai;
 	var Agent = require("./agent");
 	var types = require("./types");
-	var mapGenerator = require("./maps/outside");
+	var mapGenerator = require("./map");
 	
 	module.exports = function World(width, height, zombies, density) {
 	
@@ -54,7 +54,7 @@
 				if (action.attack) {
 					for (key in world.agents) {
 						agent2 = world.agents[key];
-						var dist = distance(action.attack, agent2);
+						var dist = g.dist(action.attack, agent2);
 						if (dist < agent.attackSize) {
 							agent2.health += -agent.attackStrength;
 						}
@@ -192,9 +192,5 @@
 			}
 		};
 	};
-
-	function distance(point1, point2) {
-		return Math.sqrt( Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2) );
-	}
 
 })();
