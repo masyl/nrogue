@@ -7,7 +7,6 @@
 
 ## MUSTS
 - War: Respawn upon death instead of disconnecting
-- HUD: Should players agent health and HITS in obvious easy to read UI
 - Humans dont attack humans by default (collab)
 - War: Delay before respawning
 - War: Attacks have a reload delay enforced
@@ -17,7 +16,6 @@
 - Optimization: Sync map redraw on requestAnimationFrame.
 - Mode: Resting: gain back health when user stops moving for long enough
 - Mode: Exaustion: loose health when has been running for too long
-- Floors should not regenerate past 75%
 - War: Show where an attack landed
 - Build process for optimization and packaging
 
@@ -43,6 +41,7 @@
 
 # AWESOME MAYBE
 - sound ? http://blog.yjl.im/2010/04/single-frequency-wave-generation-using.html
+- HUD: Should players agent health and HITS in obvious easy to read UI
 - Zombies a lot more active and powerfull according to lack of sunlight... will switch their fight or flight mode
 - Lighting effect at night
 - Ability for agent to walk or run (oversampling of ticks)

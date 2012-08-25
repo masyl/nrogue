@@ -123,9 +123,9 @@
 						// Adjust vision according to health
 						agent.vision = agent.visionRange * (agent.health/1000);
 
-						// Gain back health if standing on a "floor"
+						// Gain back health if standing on a "floor", to a max of 75%
 						var block = world.map.f[agent.x + "-" + agent.y];
-						if (block && (block.type == "floor")) agent.health += 10;
+						if (block && (block.type == "floor") && agent.health < 750) agent.health += 10;
 	
 						// Enforce limit on health
 						if (agent.health > 1000) agent.health = 1000;
