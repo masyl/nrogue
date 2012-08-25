@@ -1,12 +1,17 @@
 //todo: optimize size by using arrays instead of objects
 module.exports = {
+	"empty": {
+		symbol: ' ',
+		color: {r:128, g:128, b:128},
+		solid: true
+	},
 	"grass": {
 		symbol: '"',
-		color: {r:0, g:148, b:0},
+		color: {r:0, g:158, b:0},
 		solid: false
 	},
 	"wall": {
-		symbol: "W",
+		symbol: "#",
 		color: {r:64, g:64, b:64},
 		solid: true
 	},
@@ -17,8 +22,8 @@ module.exports = {
 	},
 	"tree": {
 		symbol: "T",
-		color: {r:0, g:102, b:0},
-		solid: true
+		color: {r:0, g:112, b:0},
+		solid: false
 	},
 	"soil": {
 		symbol: "·",
@@ -43,6 +48,16 @@ module.exports = {
 	"blood": {
 		symbol: "B",
 		color: {r:255, g:30, b:30},
+		solid: false
+	},
+	"water": {
+		symbol: "w",
+		color: {r:40, g:40, b:220},
+		solid: false
+	},
+	"deepWater": {
+		symbol: "W",
+		color: {r:25, g:25, b:180},
 		solid: false
 	}
 };

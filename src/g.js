@@ -4,11 +4,11 @@
 (function () {
 	var g = (typeof module !== "undefined") ? module.exports : window;
 
-	g.Block = function (x, y, type, agent) {
+	g.Block = function (x, y, type) {
 		var block = this;
 		block.x = x;
 		block.y = y;
-		block.type = type;
+		block.type = type || "empty";
 	};
 
 	// Static server

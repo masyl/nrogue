@@ -4,14 +4,14 @@
 (function (global) {
 	var w = window;
 	var nullAlias = null;
-	var i;
+	var i, j;
 	var d = document;
 	var canvas = d.getElementById("c");
 	var ctx = canvas.getContext("2d");
 	var world;
 	var target;
 	var mapSizeInBlocks; // map width
-	var blockSize = 7;
+	var blockSize = 6;
 	var blockOffset = 3;
 	var isDrawing = true;
 	var types;
@@ -35,6 +35,7 @@
 	var pow = M.pow;
 	var floor = M.floor;
 	var PI = Math.PI;
+	var layer;
 
 	// Function prototype aliasing
 	// Used for creating local function names bound to the original function
@@ -73,8 +74,8 @@
 		};
 		canvas.onmousemove = function(e) {
 			e.preventDefault();
-			var x = floor((e.layerX)/ blockSize);
-			var y = floor((e.layerY)/ blockSize);
+			var x = floor(e.layerX / blockSize);
+			var y = floor(e.layerY / blockSize);
 			if (isNaN(x)) {
 				target = nullAlias;
 			} else {
@@ -98,26 +99,24 @@
 
 	function drawMap(world, action) {
 		lastType = nullAlias;
-		// Draw map
+		// Draw map by layers
 		if (map && !mapCache) {
 			ctx_beginPath();
-			opacity = 1;
-			for (i in map) {
-				block = map[i];
-				//if (self) if (distance(block, self) > self.visionRange) opacity = 0.95;
-				drawBlock(block.x, block.y, types[block.type]);
-			}
-			ctx_fill();
+			drawLayer(map.g, 1);
+			drawLayer(map.f, 1);
 			mapCache = ctx.getImageData(0, 0, mapSizeInBlocks * blockSize, mapSizeInBlocks * blockSize);
 		} else if (map && mapCache) {
 			ctx.putImageData(mapCache, 0, 0);
 		}
 
-		// draw daytime offset
-		ctx_beginPath();
-		ctx.fillStyle = rgbaBlack + (world.sunlight * 0.7) + ")";
-		ctx.rect(0, 0, mapSizeInBlocks * blockSize, mapSizeInBlocks * blockSize);
-		ctx_fill();
+		function drawLayer(layer, opacity) {
+			ctx_beginPath();
+			for (j in layer) {
+				block = layer[j];
+				drawBlock(block, types[block.type], opacity);
+			}
+			ctx_fill();
+		}
 
 
 		// Draw agents
@@ -130,10 +129,18 @@
 				} else {
 					type = types[agent.type];
 				}
-				drawBlock(agent.x, agent.y, type);
+				drawBlock(agent, type, 1);
 			}
 			ctx_fill();
 		}
+
+		drawLayer(map.v, 0.7);
+
+		// draw daytime offset
+		ctx_beginPath();
+		ctx.fillStyle = rgbaBlack + (world.sunlight * 0.7) + ")";
+		ctx.rect(0, 0, mapSizeInBlocks * blockSize, mapSizeInBlocks * blockSize);
+		ctx_fill();
 
 		// draw fog-of-war
 		mapSizeInPx = mapSizeInBlocks * blockSize;
@@ -180,14 +187,14 @@
 		ctx_fillText(M.round(self.health/10) + "%", mapSizeInBlocks * blockSize - 75, 30);
 	}
 
-	function drawBlock(x, y, type) {
+	function drawBlock(block, type, opacity) {
 		if (lastType !== type) {
 			ctx_fill();
 			ctx_beginPath();
 			color = type.color;
-			ctx.fillStyle = lastFill = "rgba(" + floor(color.r) + "," + floor(color.g) + "," + floor(color.b) + ", 1);";
+			ctx.fillStyle = lastFill = "rgba(" + floor(color.r) + "," + floor(color.g) + "," + floor(color.b) + ", " + opacity + ");";
 		}
-		ctx.rect(x * blockSize, y * blockSize, blockSize, blockSize);
+		ctx.rect(block.x * blockSize, block.y * blockSize, blockSize, blockSize);
 		lastType = type;
 	}
 

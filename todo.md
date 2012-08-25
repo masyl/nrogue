@@ -13,6 +13,7 @@
 - War: Attacks have a reload delay enforced
 
 ## NICE TO HAVE
+- Roof layer that disapears when inside a building
 - Optimization: Sync map redraw on requestAnimationFrame.
 - Mode: Resting: gain back health when user stops moving for long enough
 - Mode: Exaustion: loose health when has been running for too long
@@ -21,9 +22,16 @@
 - Build process for optimization and packaging
 
 ## GAMEPLAY POSSIBILITIES:
-- Med packs
-- Weapons
-- Missions: Go grab "abc" at coord X/Y, kill XX zombies, etc... 
+- Item: Med packs
+- Weapon: Shot gun with limited munitions
+- Mission: Successive checkpoints
+- Mission: Go grab "abc" at coord X/Y
+- Mission: Bring back X to coord Y
+- Mission: kill XX zombies
+- Mission: Protect X
+- Zombies cant' walk in deep water
+
+
 
 # AWESOME MUSTS
 - On the client, run "agent code" in a webworker
@@ -34,7 +42,7 @@
 - Zombie vision range grows with opacity
 
 # AWESOME MAYBE
-
+- sound ? http://blog.yjl.im/2010/04/single-frequency-wave-generation-using.html
 - Zombies a lot more active and powerfull according to lack of sunlight... will switch their fight or flight mode
 - Lighting effect at night
 - Ability for agent to walk or run (oversampling of ticks)

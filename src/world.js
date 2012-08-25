@@ -6,7 +6,6 @@
 	var mapGenerator = require("./map");
 	
 	module.exports = function World(width, height, zombies, density) {
-	
 		var
 			world = this,
 			agentsCount = 0;
@@ -110,7 +109,7 @@
 					if (y2 < 0) y2 = 0;
 	
 					// Enforce solid blocks
-					var block = world.map[x2 + "-" + y2];
+					var block = world.map.f[x2 + "-" + y2];
 					if (block) {
 						var type = world.types[block.type];
 						if (type.solid) {
@@ -125,11 +124,10 @@
 						agent.vision = agent.visionRange * (agent.health/1000);
 
 						// Gain back health if standing on a "floor"
-						var block = world.map[agent.x + "-" + agent.y];
+						var block = world.map.f[agent.x + "-" + agent.y];
 						if (block && (block.type == "floor")) agent.health += 10;
 	
 						// Enforce limit on health
-						
 						if (agent.health > 1000) agent.health = 1000;
 					}
 
@@ -164,7 +162,7 @@
 			
 			// Spawn zombies
 			for (var i = 0; i < zombies; i++) {
-				this.spawnZombie();
+				world.spawnZombie();
 			}
 
 			setInterval(function () {
